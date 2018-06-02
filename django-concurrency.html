@@ -3,8 +3,8 @@
 <head>
         <meta charset="utf-8" />
         <title>Afegir concurrència a comandes de Django</title>
-        <link rel="stylesheet" href="https:/www.espontas.com/theme/css/main.css" />
-        <link href="https:/www.espontas.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Andreu Vallbona Atom Feed" />
+        <link rel="stylesheet" href="https://avallbona.github.io/theme/css/main.css" />
+        <link href="https://avallbona.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Andreu Vallbona Atom Feed" />
 
         <!--[if IE]>
             <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -13,17 +13,17 @@
 
 <body id="index" class="home">
         <header id="banner" class="body">
-                <h1><a href="https:/www.espontas.com/">Andreu Vallbona </a></h1>
+                <h1><a href="https://avallbona.github.io/">Andreu Vallbona </a></h1>
                 <nav><ul>
-                    <li><a href="https:/www.espontas.com/pages/about-me.html">About me</a></li>
-                    <li class="active"><a href="https:/www.espontas.com/category/django.html">Django</a></li>
+                    <li><a href="https://avallbona.github.io/pages/about-me.html">About me</a></li>
+                    <li class="active"><a href="https://avallbona.github.io/category/django.html">Django</a></li>
                 </ul></nav>
         </header><!-- /#banner -->
 <section id="content" class="body">
   <article>
     <header>
       <h1 class="entry-title">
-        <a href="https:/www.espontas.com/django-concurrency.html" rel="bookmark"
+        <a href="https://avallbona.github.io/django-concurrency.html" rel="bookmark"
            title="Permalink to Afegir concurrència a comandes de Django">Afegir concurrència a comandes de Django</a></h1>
     </header>
 
@@ -38,10 +38,10 @@
         </abbr>
 
         <address class="vcard author">
-                By                         <a class="url fn" href="https:/www.espontas.com/author/andreu.html">Andreu</a>
+                By                         <a class="url fn" href="https://avallbona.github.io/author/andreu.html">Andreu</a>
         </address>
-<p>In <a href="https:/www.espontas.com/category/django.html">Django</a>.</p>
-<p>tags: <a href="https:/www.espontas.com/tag/django.html">django</a> <a href="https:/www.espontas.com/tag/concurrency.html">concurrency</a> </p>
+<p>In <a href="https://avallbona.github.io/category/django.html">Django</a>.</p>
+<p>tags: <a href="https://avallbona.github.io/tag/django.html">django</a> <a href="https://avallbona.github.io/tag/concurrency.html">concurrency</a> </p>
 </footer><!-- /.post-info -->      <p>En algunes ocasions he hagut d'implementar alguna comanda de <strong>Django</strong> 
 per tal de realitzar alguna tasca de manteniment. El procés sól esser, en moltes ocasions, el mateix. Processar secuencialment un número d'objectes. El problema és que quan s'executa la comanda es sol emprar un sol procés en un sol core. Això té l'inconvenient que, si el número d'objectes a tractar és molt gran, la comanda tarda considerablement.<!--more--></p>
 <p>Per posar un exemple. Una comanda que processa un model simple de Django amb 340.000 registres. L'operació a executar és comptar el número de paraules d'un camp de text i desar aquest número dins un camp del propi model. Emprant l'ORM de Django no ens permet d'executar l'operació al mateix temps que es llegeix, no podem fer un "update" executant una funció Python. Per aquest motiu, hem de, primer llegir el registre, calcular el número de paraules i llavors, en un segon pas, actualitzar el número de paraules sobre cada registre. D'aquesta manera ens queda que hem d'executar una sentència "update" d'sql per a cada registre.</p>
@@ -144,7 +144,7 @@ per tal de realitzar alguna tasca de manteniment. El procés sól esser, en molt
                 <div class="social">
                         <h2>social</h2>
                         <ul>
-                            <li><a href="https:/www.espontas.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+                            <li><a href="https://avallbona.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
 
                             <li><a href="https://github.com/avallbona">github</a></li>
                             <li><a href="https://twitter.com/avallbona">twitter</a></li>
