@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <title>Andreu Vallbona - concurrency</title>
+        <link rel="stylesheet" href="https:/www.espontas.com/theme/css/main.css" />
+        <link href="https:/www.espontas.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Andreu Vallbona Atom Feed" />
+
+        <!--[if IE]>
+            <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="https:/www.espontas.com/">Andreu Vallbona </a></h1>
+                <nav><ul>
+                    <li><a href="https:/www.espontas.com/pages/about-me.html">About me</a></li>
+                    <li><a href="https:/www.espontas.com/category/django.html">Django</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+
+            <aside id="featured" class="body">
+                <article>
+                    <h1 class="entry-title"><a href="https:/www.espontas.com/django-concurrency.html">Afegir concurrència a comandes de Django</a></h1>
+<footer class="post-info">
+        <abbr class="published" title="2018-06-02T10:41:00+02:00">
+                Published: sáb 02 junio 2018
+        </abbr>
+		<br />
+        <abbr class="modified" title="2018-06-02T10:41:00+02:00">
+                Updated: sáb 02 junio 2018
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="https:/www.espontas.com/author/andreu.html">Andreu</a>
+        </address>
+<p>In <a href="https:/www.espontas.com/category/django.html">Django</a>.</p>
+<p>tags: <a href="https:/www.espontas.com/tag/django.html">django</a> <a href="https:/www.espontas.com/tag/concurrency.html">concurrency</a> </p>
+</footer><!-- /.post-info --><p>En algunes ocasions he hagut d'implementar alguna comanda de <strong>Django</strong> 
+per tal de realitzar alguna tasca de manteniment. El procés sól esser, en moltes ocasions, el mateix. Processar secuencialment un número d'objectes. El problema és que quan s'executa la comanda es sol emprar un sol procés en un sol core. Això té l'inconvenient que, si el número d'objectes a tractar és molt gran, la comanda tarda considerablement.<!--more--></p>
+<p>Per posar un exemple. Una comanda que processa un model simple de Django amb 340.000 registres. L'operació a executar és comptar el número de paraules d'un camp de text i desar aquest número dins un camp del propi model. Emprant l'ORM de Django no ens permet d'executar l'operació al mateix temps que es llegeix, no podem fer un "update" executant una funció Python. Per aquest motiu, hem de, primer llegir el registre, calcular el número de paraules i llavors, en un segon pas, actualitzar el número de paraules sobre cada registre. D'aquesta manera ens queda que hem d'executar una sentència "update" d'sql per a cada registre.</p>
+<p>Una possible implementació de la comanda podria esser la següent:</p>
+<div class="highlight"><pre><span></span><span class="c1"># -*- encoding: utf-8 -*-</span>
+
+<span class="kn">from</span> <span class="nn">django.core.management.base</span> <span class="kn">import</span> <span class="n">BaseCommand</span>
+<span class="kn">from</span> <span class="nn">...models</span> <span class="kn">import</span> <span class="n">TransTask</span>
+<span class="kn">from</span> <span class="nn">...utils</span> <span class="kn">import</span> <span class="n">get_num_words</span>
+
+
+<span class="k">class</span> <span class="nc">Command</span><span class="p">(</span><span class="n">BaseCommand</span><span class="p">):</span>
+    <span class="n">help</span> <span class="o">=</span> <span class="s2">&quot;Update the number of words of the tasks&quot;</span>
+
+    <span class="k">def</span> <span class="nf">handle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">options</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;Reading tasks...&#39;</span><span class="p">)</span>
+        <span class="n">pairs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="n">TransTask</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
+            <span class="n">pairs</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="n">it</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="s1">&#39;num&#39;</span><span class="p">:</span> <span class="n">get_num_words</span><span class="p">(</span><span class="n">it</span><span class="o">.</span><span class="n">object_field_value</span><span class="p">)})</span>
+
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">pairs</span><span class="p">:</span>
+            <span class="n">TransTask</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="n">item</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">number_of_words</span><span class="o">=</span><span class="n">item</span><span class="p">[</span><span class="s1">&#39;num&#39;</span><span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;end&#39;</span><span class="p">)</span>
+</pre></div>
+
+
+<p>Emprant el suport per "<strong>Threads</strong>" de Python 3.4, una possible solució podria esser la següent:</p>
+<div class="highlight"><pre><span></span><span class="c1"># -*- encoding: utf-8 -*-</span>
+
+<span class="kn">from</span> <span class="nn">queue</span> <span class="kn">import</span> <span class="n">Queue</span><span class="p">,</span> <span class="n">Empty</span>
+<span class="kn">from</span> <span class="nn">threading</span> <span class="kn">import</span> <span class="n">Lock</span><span class="p">,</span> <span class="n">Thread</span>
+
+<span class="kn">from</span> <span class="nn">django.core.management.base</span> <span class="kn">import</span> <span class="n">BaseCommand</span>
+<span class="kn">from</span> <span class="nn">...models</span> <span class="kn">import</span> <span class="n">TransTask</span>
+<span class="kn">from</span> <span class="nn">...utils</span> <span class="kn">import</span> <span class="n">get_num_words</span>
+
+
+<span class="k">class</span> <span class="nc">Command</span><span class="p">(</span><span class="n">BaseCommand</span><span class="p">):</span>
+    <span class="n">help</span> <span class="o">=</span> <span class="s2">&quot;Update the number of words of the tasks&quot;</span>
+
+    <span class="n">lock</span> <span class="o">=</span> <span class="n">Lock</span><span class="p">()</span>
+    <span class="n">queue</span> <span class="o">=</span> <span class="n">Queue</span><span class="p">()</span>
+    <span class="n">num_threads</span> <span class="o">=</span> <span class="mi">80</span>
+    <span class="n">threads</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span> <span class="nf">handle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">options</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">queue</span> <span class="o">=</span> <span class="n">Queue</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;Reading tasks...&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="n">TransTask</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">put</span><span class="p">({</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="n">it</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="s1">&#39;num&#39;</span><span class="p">:</span> <span class="n">get_num_words</span><span class="p">(</span><span class="n">it</span><span class="o">.</span><span class="n">object_field_value</span><span class="p">)})</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_threads</span><span class="p">):</span>
+            <span class="n">t</span> <span class="o">=</span> <span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">worker_elements</span><span class="p">)</span>
+            <span class="n">t</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">threads</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;Waiting for empty queue&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stop_threads</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">stop_threads</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">threads</span><span class="p">:</span>
+            <span class="n">t</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;Exiting main thread&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">worker_elements</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">while</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">empty</span><span class="p">():</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">item</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+                <span class="n">TransTask</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="n">item</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">number_of_words</span><span class="o">=</span><span class="n">item</span><span class="p">[</span><span class="s1">&#39;num&#39;</span><span class="p">])</span>
+            <span class="k">except</span> <span class="n">Empty</span><span class="p">:</span>
+                <span class="k">break</span>
+            <span class="k">finally</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">task_done</span><span class="p">()</span>
+</pre></div>
+
+
+<p>Aquesta solució el que fá és, definir una cua ("<strong>Queue</strong>") a la quan anem desant els elements a processar i llavors definir una sèrie de "<strong>Threads</strong>", cadascún dels qual va desencuant els elements per tal de processar-los. D'aquesta manera aconseguim una "pseudo concurrència" a l'hora d'anar actualitzant la base de dades.</p>
+<p>Per a processar un total d'uns 340.000 registres, la primera versió va tardar uns 22 min i 55 seg. Amb la segona versió, la multithreaded, va tardar 57 seg. Executades les dues versions amb la mateixa màquina i mateixes condicions.</p>
+<p>Cal mencionar que, en realitat no estem afegint paralel.lisme, ja que només hi ha un thread executant-se a la vegada gràcies al <a href="https://wiki.python.org/moin/GlobalInterpreterLock" target="_blank">GIL</a> de Python. Aquest segon exemple és més ràpid ja que mentres un thread està esperant, per a mor de la connexió base de dades, s'arranca un altre thread que estigui disponible per processar un altre element.</p>
+<p>Enllaços relacionats:</p>
+<ul>
+<li><a href="http://www.tutorialspoint.com/python/python_multithreading.htm">http://www.tutorialspoint.com/python/python_multithreading.htm</a></li>
+<li><a href="http://www.toptal.com/python/beginners-guide-to-concurrency-and-parallelism-in-python">http://www.toptal.com/python/beginners-guide-to-concurrency-and-parallelism-in-python</a></li>
+<li><a href="http://www.tutorialspoint.com/python/python_multithreading.htm">http://www.tutorialspoint.com/python/python_multithreading.htm</a></li>
+</ul>                </article>
+            </aside><!-- /#featured -->
+        <section id="extras" class="body">
+                <div class="blogroll">
+                        <h2>links</h2>
+                        <ul>
+                            <li><a href="http://getpelican.com/">Pelican</a></li>
+                            <li><a href="http://python.org/">Python.org</a></li>
+                            <li><a href="http://jinja.pocoo.org/">Jinja2</a></li>
+                            <li><a href="#">You can modify those links in your config file</a></li>
+                        </ul>
+                </div><!-- /.blogroll -->
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="https:/www.espontas.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                            <li><a href="https://github.com/avallbona">github</a></li>
+                            <li><a href="https://twitter.com/avallbona">twitter</a></li>
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>
