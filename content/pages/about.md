@@ -1,4 +1,4 @@
-Title: About me
+Title: About me****
 
 De 1993 a 1995 obtinc el títol de Formació Professional (branca administrativa i comercial, especialitat informatica). De 1995 a 1997 obtinc el títol de Cicle Formatiu de Grau Superior en Administració de sistemes informàtics. D’octubre a desembre de 2000 curs el curs Desenvolupament d’aplicacions web impartit per l’Escola de Disseny Via Roma. De maig a juliol de 2005 curs el curs de Flash impartit per l’escola EDA. De març a abril de 2008 curs el curs Accés a bases de dades amb JDBC i el curs de J2EE, impartits els dos cursos per la CAEB. Cursat al setembre 2009 l’curs sobre webservices Curs Càpsula de Tecnologia SOA impartit per Turistec dins l’àmbit del Projecte CAVAL. Al gener de 2012 obtinc el títol d’Enginyer Tècnic en Informàtica de Sistemes a través de la UOC.
 
