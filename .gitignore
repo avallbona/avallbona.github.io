@@ -1,3 +1,4 @@
 *.pid
 __pycache__
 .idea/
+output/
