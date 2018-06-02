@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
         <meta charset="utf-8" />
-        <title>Encadenar select's Html amb Django de manera fàcil i poc intrussiva</title>
+        <title>Andreu Vallbona - javascript</title>
         <link rel="stylesheet" href="https:/www.espontas.com/theme/css/main.css" />
         <link href="https:/www.espontas.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Andreu Vallbona Atom Feed" />
 
@@ -16,18 +16,13 @@
                 <h1><a href="https:/www.espontas.com/">Andreu Vallbona </a></h1>
                 <nav><ul>
                     <li><a href="https:/www.espontas.com/pages/about-me.html">About me</a></li>
-                    <li class="active"><a href="https:/www.espontas.com/category/django.html">Django</a></li>
+                    <li><a href="https:/www.espontas.com/category/django.html">Django</a></li>
                 </ul></nav>
         </header><!-- /#banner -->
-<section id="content" class="body">
-  <article>
-    <header>
-      <h1 class="entry-title">
-        <a href="https:/www.espontas.com/chained-html-selects.html" rel="bookmark"
-           title="Permalink to Encadenar select's Html amb Django de manera fàcil i poc intrussiva">Encadenar select's Html amb Django de manera fàcil i poc intrussiva</a></h1>
-    </header>
 
-    <div class="entry-content">
+            <aside id="featured" class="body">
+                <article>
+                    <h1 class="entry-title"><a href="https:/www.espontas.com/chained-html-selects.html">Encadenar select's Html amb Django de manera fàcil i poc intrussiva</a></h1>
 <footer class="post-info">
         <abbr class="published" title="2018-06-03T10:41:00+02:00">
                 Published: dom 03 junio 2018
@@ -42,7 +37,7 @@
         </address>
 <p>In <a href="https:/www.espontas.com/category/django.html">Django</a>.</p>
 <p>tags: <a href="https:/www.espontas.com/tag/django.html">django</a> <a href="https:/www.espontas.com/tag/html.html">html</a> <a href="https:/www.espontas.com/tag/javascript.html">javascript</a> <a href="https:/www.espontas.com/tag/jquery.html">jquery</a> </p>
-</footer><!-- /.post-info -->      <p>Fa un temps que he descobert un "plugin" jQuery que va força be per encadenar <em>select</em>'s Html amb Django, és a dir, que les opcións d'un <em>select</em> s'actualitzin en funció del valor seleccionat a un primer <em>select</em>. El "plugin" en qüestió és diu <strong><a href="http://www.appelsiini.net/projects/chained" target="_blank">Chained Selects Plugin for jQuery and Zepto</a></strong>. Per fer-lo servir simplement hem d'estendre el "widget" per defecte per representar els <em>select</em>'s html en Django.<!--more--></p>
+</footer><!-- /.post-info --><p>Fa un temps que he descobert un "plugin" jQuery que va força be per encadenar <em>select</em>'s Html amb Django, és a dir, que les opcións d'un <em>select</em> s'actualitzin en funció del valor seleccionat a un primer <em>select</em>. El "plugin" en qüestió és diu <strong><a href="http://www.appelsiini.net/projects/chained" target="_blank">Chained Selects Plugin for jQuery and Zepto</a></strong>. Per fer-lo servir simplement hem d'estendre el "widget" per defecte per representar els <em>select</em>'s html en Django.<!--more--></p>
 <p>La idea és crear codi html per tal que es mostri similar a la següent manera, és a dir, que la clau dels valors del primer select es fixin com a css class dels options del segon select.</p>
 <div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">select</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;mark&quot;</span> <span class="na">name</span><span class="o">=</span><span class="s">&quot;mark&quot;</span><span class="p">&gt;</span>
   <span class="p">&lt;</span><span class="nt">option</span> <span class="na">value</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">&gt;</span>--<span class="p">&lt;/</span><span class="nt">option</span><span class="p">&gt;</span>
@@ -157,11 +152,8 @@
 
 
 <p>A l'exemple li deim que el selector amb identificador "#id_type" depen del selector amb identificador "#id_group". Finalment senyalar que el plugin és bastant versàtil ja que permet enllaçar varis selectors a la vegada amb la mateixa tècnica. </p>
-<p><a href="http://www.appelsiini.net/projects/chained">http://www.appelsiini.net/projects/chained</a></p>
-    </div><!-- /.entry-content -->
-
-  </article>
-</section>
+<p><a href="http://www.appelsiini.net/projects/chained">http://www.appelsiini.net/projects/chained</a></p>                </article>
+            </aside><!-- /#featured -->
         <section id="extras" class="body">
                 <div class="blogroll">
                         <h2>links</h2>
@@ -169,7 +161,6 @@
                             <li><a href="http://getpelican.com/">Pelican</a></li>
                             <li><a href="http://python.org/">Python.org</a></li>
                             <li><a href="http://jinja.pocoo.org/">Jinja2</a></li>
-                            <li><a href="#">You can modify those links in your config file</a></li>
                         </ul>
                 </div><!-- /.blogroll -->
                 <div class="social">
