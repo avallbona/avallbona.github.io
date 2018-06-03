@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
         <meta charset="utf-8" />
-        <title>Andreu Vallbona</title>
+        <title>Customització de backend d'autenticació amb Django</title>
         <link rel="stylesheet" href="https://avallbona.github.io/theme/css/main.css" />
         <link href="https://avallbona.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Andreu Vallbona Atom Feed" />
 
@@ -17,34 +17,69 @@
                 <nav><ul>
                     <li><a href="https://avallbona.github.io/pages/about-me.html">About me</a></li>
                     <li><a href="https://avallbona.github.io/category/django.html">Django</a></li>
-                    <li><a href="https://avallbona.github.io/category/django-feina.html">Django, Feina</a></li>
+                    <li class="active"><a href="https://avallbona.github.io/category/django-feina.html">Django, Feina</a></li>
                     <li><a href="https://avallbona.github.io/category/feina.html">Feina</a></li>
                     <li><a href="https://avallbona.github.io/category/uncategorized.html">Uncategorized</a></li>
                 </ul></nav>
         </header><!-- /#banner -->
 <section id="content" class="body">
-<h1>Archives for Andreu Vallbona</h1>
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="https://avallbona.github.io/customitzacio-de-backend-dautenticacio-amb-django.html" rel="bookmark"
+           title="Permalink to Customització de backend d'autenticació amb Django">Customització de backend d'autenticació amb Django</a></h1>
+    </header>
 
-<dl>
-    <dt>dom 03 junio 2018</dt>
-    <dd><a href="https://avallbona.github.io/chained-html-selects.html">Encadenar select's Html amb Django de manera fàcil i poc intrussiva</a></dd>
-    <dt>dom 03 junio 2018</dt>
-    <dd><a href="https://avallbona.github.io/django-lookup-fields.html">Lookup fields customitzats en Django</a></dd>
-    <dt>sáb 02 junio 2018</dt>
-    <dd><a href="https://avallbona.github.io/django-concurrency.html">Afegir concurrència a comandes de Django</a></dd>
-    <dt>mar 05 enero 2016</dt>
-    <dd><a href="https://avallbona.github.io/429.html">Frasses</a></dd>
-    <dt>mié 30 diciembre 2015</dt>
-    <dd><a href="https://avallbona.github.io/deteccio-idioma-per-subdomini-en-django.html">Detecció idioma per subdomini en Django</a></dd>
-    <dt>mié 30 diciembre 2015</dt>
-    <dd><a href="https://avallbona.github.io/customitzacio-de-backend-dautenticacio-amb-django.html">Customització de backend d'autenticació amb Django</a></dd>
-    <dt>dom 13 septiembre 2015</dt>
-    <dd><a href="https://avallbona.github.io/formateig-per-defecte-de-les-dates-amb-django.html">Formateig per defecte de les dates amb Django</a></dd>
-    <dt>dom 13 septiembre 2015</dt>
-    <dd><a href="https://avallbona.github.io/368.html">About development</a></dd>
-    <dt>sáb 12 septiembre 2015</dt>
-    <dd><a href="https://avallbona.github.io/django-extra-views.html">Django extra views</a></dd>
-</dl>
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2015-12-30T10:11:00+01:00">
+                Published: mié 30 diciembre 2015
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="https://avallbona.github.io/author/blogadmin.html">blogadmin</a>
+        </address>
+<p>In <a href="https://avallbona.github.io/category/django-feina.html">Django, Feina</a>.</p>
+
+</footer><!-- /.post-info -->      <p>Per defecte Django empra el backend d'autenticació "ModelBackend"</p>
+<p>[sourcecode language="python"]<br>
+AUTHENTICATION_BACKENDS = (<br>
+'django.contrib.auth.backends.ModelBackend',<br>
+)<br>
+[/sourcecode]</p>
+<p>Aquest "backend" intenta autenticara partir del nom d'usuari i la
+contrasenya que reb. Nogensmenys es pot donar el cas que vulguem
+autenticar a partir de l'email de l'usuari.<!--more--></p>
+<p>Per aquest cas ho podem fer estenent la classe "ModelBackend" i
+reimplementant el mètode autenticate:</p>
+<p>[sourcecode language="python"]<br>
+class MyCustomEmailAuthBackend(ModelBackend):<br>
+"""<br>
+Allow users to log in with their email address<br>
+"""</p>
+<p>def authenticate(self, email=None, password=None, **kwargs):</p>
+<p>if email is None or password is None:<br>
+return None</p>
+<p>try:<br>
+user = User.objects.get(email=email)<br>
+if user.check_password(password):<br>
+return user<br>
+except User.DoesNotExist:<br>
+return None<br>
+[/sourcecode]</p>
+<p>Un cop que tenim el backend implementat l'hem d'afegir als "settings"
+per tal que Django ho tingui en compte:</p>
+<p>[sourcecode language="python"]<br>
+AUTHENTICATION_BACKENDS = (<br>
+'authentication.MyCustomEmailAuthBackend',<br>
+'django.contrib.auth.backends.ModelBackend',<br>
+)<br>
+[/sourcecode]<br>
+Aleshores si el nostre formulari posteja l'email i la contrasenya ja ens
+podrem autenticar.</p>
+    </div><!-- /.entry-content -->
+
+  </article>
 </section>
         <section id="extras" class="body">
                 <div class="blogroll">

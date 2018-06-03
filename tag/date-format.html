@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <title>Andreu Vallbona - date format</title>
+        <link rel="stylesheet" href="https://avallbona.github.io/theme/css/main.css" />
+        <link href="https://avallbona.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Andreu Vallbona Atom Feed" />
+
+        <!--[if IE]>
+            <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="https://avallbona.github.io/">Andreu Vallbona </a></h1>
+                <nav><ul>
+                    <li><a href="https://avallbona.github.io/pages/about-me.html">About me</a></li>
+                    <li><a href="https://avallbona.github.io/category/django.html">Django</a></li>
+                    <li><a href="https://avallbona.github.io/category/django-feina.html">Django, Feina</a></li>
+                    <li><a href="https://avallbona.github.io/category/feina.html">Feina</a></li>
+                    <li><a href="https://avallbona.github.io/category/uncategorized.html">Uncategorized</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+
+            <aside id="featured" class="body">
+                <article>
+                    <h1 class="entry-title"><a href="https://avallbona.github.io/formateig-per-defecte-de-les-dates-amb-django.html">Formateig per defecte de les dates amb Django</a></h1>
+<footer class="post-info">
+        <abbr class="published" title="2015-09-13T21:32:00+02:00">
+                Published: dom 13 septiembre 2015
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="https://avallbona.github.io/author/blogadmin.html">blogadmin</a>
+        </address>
+<p>In <a href="https://avallbona.github.io/category/django-feina.html">Django, Feina</a>.</p>
+<p>tags: <a href="https://avallbona.github.io/tag/date-format.html">date format</a> <a href="https://avallbona.github.io/tag/django.html">django</a> <a href="https://avallbona.github.io/tag/strftime.html">strftime</a> </p>
+</footer><!-- /.post-info --><p>Al principi de començar amb <strong>Django</strong> me vaig trobar amb el problema
+del format de les dates. Per a la part de frontend no és massa
+problemàtic ja que podem fixar noltros el format de cada data en
+particular. Per exemple:<br>
+[sourcecode language="python"]<br>
+&lt;p&gt;{% trans 'Fecha salida' %}: {{
+reservation.departure_date_res|date:'d/m/Y' }}&lt;/p&gt;<br>
+[/sourcecode]<br>
+El problema sorgeix amb, per exemple, el format de les dates de
+l'administrador, el qual està determinat pels valors per defecte de
+django. <!--more--></p>
+<p>Aquests solen variar en funció de l'idioma de l'usuari i/o del
+navegador. Per corregir aquests fet, <strong>Django</strong> ens proporciona un
+mètode per poder fixar els formats per defecte de les dates. Al
+directori on està definit el projecte s'ha de creat una carpeta
+"formats" que contingui un directori per a cada idioma (es, ca, de, en,
+...) i que, cadascuna d'aquestes contingui un arxiu "formats.py" amb els
+formats de les dates. Per exemple:<br>
+<a href="http://www.espontas.com/wp-content/uploads/captura-date-formats.png"><img alt="captura date
+formats" src="http://www.espontas.com/wp-content/uploads/captura-date-formats.png">{.alignleft
+.size-full .wp-image-378 width="861"
+height="462"}</a><br>
+Llavors al settings.py s'ha d'afegir una linia per indicar d'on s'ha
+d'agafar el format de les dates:</p>
+<p>[sourcecode language="python"]<br>
+FORMAT_MODULE_PATH = 'balearictransfer.formats'<br>
+[/sourcecode]</p>
+<p>També es poden indicar el format de les dates pels "inputs" de les
+dates, així com el separador decimal o de mils, per exemple:</p>
+<p>[sourcecode language="python"]<br>
+DATE_INPUT_FORMATS = (<br>
+'%d-%m-%Y', # '21-03-2014'<br>
+)<br>
+TIME_INPUT_FORMATS = (<br>
+'%H:%M:%S', # '17:59:59'<br>
+'%H:%M', # '17:59'<br>
+)<br>
+DATETIME_INPUT_FORMATS = (<br>
+'%d-%m-%Y %H:%M', # '21-03-2014 17:59'<br>
+)</p>
+<p>DECIMAL_SEPARATOR = u'.'<br>
+THOUSAND_SEPARATOR = u','<br>
+NUMBER_GROUPING = 3<br>
+[/sourcecode]</p>
+<p>A <strong>Github</strong> podeu trobar un <a href="https://github.com/andilabs/demo_time_set">projecte de
+mostra</a> que explica com
+funciona el tema. I també la <a href="http://stackoverflow.com/a/22565251">pertinent
+explicació</a> a <strong>Stack Overflow</strong></p>                </article>
+            </aside><!-- /#featured -->
+        <section id="extras" class="body">
+                <div class="blogroll">
+                        <h2>links</h2>
+                        <ul>
+                            <li><a href="http://getpelican.com/">Pelican</a></li>
+                            <li><a href="http://python.org/">Python.org</a></li>
+                            <li><a href="http://jinja.pocoo.org/">Jinja2</a></li>
+                        </ul>
+                </div><!-- /.blogroll -->
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="https://avallbona.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                            <li><a href="https://github.com/avallbona">github</a></li>
+                            <li><a href="https://twitter.com/avallbona">twitter</a></li>
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

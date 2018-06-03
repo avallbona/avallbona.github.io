@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Andreu Vallbona - Django, Feina</title><link href="https://avallbona.github.io/" rel="alternate"></link><link href="https://avallbona.github.io/feeds/django-feina.atom.xml" rel="self"></link><id>https://avallbona.github.io/</id><updated>2015-12-30T11:20:00+01:00</updated><entry><title>Detecció idioma per subdomini en Django</title><link href="https://avallbona.github.io/deteccio-idioma-per-subdomini-en-django.html" rel="alternate"></link><published>2015-12-30T11:20:00+01:00</published><updated>2015-12-30T11:20:00+01:00</updated><author><name>blogadmin</name></author><id>tag:avallbona.github.io,2015-12-30:/deteccio-idioma-per-subdomini-en-django.html</id><summary type="html">&lt;p&gt;Django ens proporciona eines per detectar i fixar l'idioma de la nostra
+aplicació. Normalment es fa servir
+&lt;strong&gt;&lt;a href="https://docs.djangoproject.com/en/1.9/topics/i18n/translation/"&gt;i18n_patterns&lt;/a&gt;&lt;/strong&gt;
+a través del qual s'encapsulen les urls amb el mateix per tal que ens
+fixi a l'inici del path de la url el codi d'idioma. Amb el middleware
+que explicarem no cal …&lt;/p&gt;</summary><content type="html">&lt;p&gt;Django ens proporciona eines per detectar i fixar l'idioma de la nostra
+aplicació. Normalment es fa servir
+&lt;strong&gt;&lt;a href="https://docs.djangoproject.com/en/1.9/topics/i18n/translation/"&gt;i18n_patterns&lt;/a&gt;&lt;/strong&gt;
+a través del qual s'encapsulen les urls amb el mateix per tal que ens
+fixi a l'inici del path de la url el codi d'idioma. Amb el middleware
+que explicarem no cal fer servir l'&lt;strong&gt;i18n_patterns&lt;/strong&gt; ja que serà el
+pròpi "middleware" que detectarà i fixarà l'idioma de l'aplicació.
+&lt;!--more--&gt;&lt;/p&gt;
+&lt;p&gt;Primer de tot crearem l'arxiu que contindrà el "middleware":&lt;/p&gt;
+&lt;p&gt;[sourcecode language="python"]&lt;/p&gt;
+&lt;p&gt;# -*- encoding: utf-8 -*-&lt;/p&gt;
+&lt;p&gt;from django.utils import translation&lt;br&gt;
+from django.conf import settings&lt;/p&gt;
+&lt;p&gt;class SubdomainLanguageMiddleware(object):&lt;br&gt;
+"""&lt;br&gt;
+Set the language for the site based on the subdomain the request&lt;br&gt;
+is being served on. For example, serving on 'fr.domain.com' would&lt;br&gt;
+make the language French (fr).&lt;br&gt;
+"""&lt;br&gt;
+language_codes = [it[0] for it in settings.LANGUAGES]&lt;/p&gt;
+&lt;p&gt;def process_request(self, request):&lt;br&gt;
+try:&lt;br&gt;
+lang = request.get_host().split('.')[0]&lt;br&gt;
+except IndexError:&lt;br&gt;
+lang = self.language_codes[0]&lt;br&gt;
+if lang == 'www':&lt;br&gt;
+lang = self.language_codes[0]&lt;br&gt;
+if lang and lang in self.language_codes:&lt;br&gt;
+translation.activate(lang)&lt;br&gt;
+request.LANGUAGE_CODE = lang&lt;/p&gt;
+&lt;p&gt;[/sourcecode]&lt;/p&gt;
+&lt;p&gt;Fixem-nos en el cas que no s'ens indica cap codi d'idioma i ens ve
+"www", que fixem el primer idioma per defecte definit als "settings.py".&lt;/p&gt;
+&lt;p&gt;Llavors, als "settings.py" hem de tenir configurats els idiomes amb els
+quals volem fer feina:&lt;/p&gt;
+&lt;p&gt;[sourcecode language="python"]&lt;br&gt;
+LANGUAGES = (&lt;br&gt;
+('ca', 'Català'),&lt;br&gt;
+('es', 'Español'),&lt;br&gt;
+('de', 'Deutsch'),&lt;br&gt;
+('en', 'English'),&lt;br&gt;
+)&lt;br&gt;
+[/sourcecode]&lt;/p&gt;
+&lt;p&gt;i, com a darrer pas, li hem d'indicar als "settings.py" que ens agafi el
+"middleware" que acabem de crear:&lt;/p&gt;
+&lt;p&gt;[sourcecode language="python"]&lt;br&gt;
+MIDDLEWARE_CLASSES = (&lt;br&gt;
+...,&lt;br&gt;
+'myproject.language_middleware.SubdomainLanguageMiddleware',&lt;br&gt;
+)&lt;br&gt;
+[/sourcecode]&lt;/p&gt;
+&lt;p&gt;Llavors ja podrem accedir a la web fixant l'idioma en el subdomini:&lt;/p&gt;
+&lt;p&gt;[sourcecode language="html"]&lt;br&gt;
+http://www.lamevaweb.com&lt;br&gt;
+http://es.lamevaweb.com&lt;br&gt;
+http://de.lamevaweb.com&lt;br&gt;
+http://en.lamevaweb.com&lt;br&gt;
+[/sourcecode]&lt;/p&gt;</content></entry><entry><title>Customització de backend d'autenticació amb Django</title><link href="https://avallbona.github.io/customitzacio-de-backend-dautenticacio-amb-django.html" rel="alternate"></link><published>2015-12-30T10:11:00+01:00</published><updated>2015-12-30T10:11:00+01:00</updated><author><name>blogadmin</name></author><id>tag:avallbona.github.io,2015-12-30:/customitzacio-de-backend-dautenticacio-amb-django.html</id><summary type="html">&lt;p&gt;Per defecte Django empra el backend d'autenticació "ModelBackend"&lt;/p&gt;
+&lt;p&gt;[sourcecode language="python"]&lt;br&gt;
+AUTHENTICATION_BACKENDS = (&lt;br&gt;
+'django.contrib.auth.backends.ModelBackend',&lt;br&gt;
+)&lt;br&gt;
+[/sourcecode]&lt;/p&gt;
+&lt;p&gt;Aquest "backend" intenta autenticara partir del nom d'usuari i la
+contrasenya que reb. Nogensmenys es pot donar el cas que vulguem
+autenticar a partir de l'email de l'usuari.&lt;!--more--&gt;&lt;/p&gt;
+&lt;p&gt;Per aquest cas ho …&lt;/p&gt;</summary><content type="html">&lt;p&gt;Per defecte Django empra el backend d'autenticació "ModelBackend"&lt;/p&gt;
+&lt;p&gt;[sourcecode language="python"]&lt;br&gt;
+AUTHENTICATION_BACKENDS = (&lt;br&gt;
+'django.contrib.auth.backends.ModelBackend',&lt;br&gt;
+)&lt;br&gt;
+[/sourcecode]&lt;/p&gt;
+&lt;p&gt;Aquest "backend" intenta autenticara partir del nom d'usuari i la
+contrasenya que reb. Nogensmenys es pot donar el cas que vulguem
+autenticar a partir de l'email de l'usuari.&lt;!--more--&gt;&lt;/p&gt;
+&lt;p&gt;Per aquest cas ho podem fer estenent la classe "ModelBackend" i
+reimplementant el mètode autenticate:&lt;/p&gt;
+&lt;p&gt;[sourcecode language="python"]&lt;br&gt;
+class MyCustomEmailAuthBackend(ModelBackend):&lt;br&gt;
+"""&lt;br&gt;
+Allow users to log in with their email address&lt;br&gt;
+"""&lt;/p&gt;
+&lt;p&gt;def authenticate(self, email=None, password=None, **kwargs):&lt;/p&gt;
+&lt;p&gt;if email is None or password is None:&lt;br&gt;
+return None&lt;/p&gt;
+&lt;p&gt;try:&lt;br&gt;
+user = User.objects.get(email=email)&lt;br&gt;
+if user.check_password(password):&lt;br&gt;
+return user&lt;br&gt;
+except User.DoesNotExist:&lt;br&gt;
+return None&lt;br&gt;
+[/sourcecode]&lt;/p&gt;
+&lt;p&gt;Un cop que tenim el backend implementat l'hem d'afegir als "settings"
+per tal que Django ho tingui en compte:&lt;/p&gt;
+&lt;p&gt;[sourcecode language="python"]&lt;br&gt;
+AUTHENTICATION_BACKENDS = (&lt;br&gt;
+'authentication.MyCustomEmailAuthBackend',&lt;br&gt;
+'django.contrib.auth.backends.ModelBackend',&lt;br&gt;
+)&lt;br&gt;
+[/sourcecode]&lt;br&gt;
+Aleshores si el nostre formulari posteja l'email i la contrasenya ja ens
+podrem autenticar.&lt;/p&gt;</content></entry><entry><title>Formateig per defecte de les dates amb Django</title><link href="https://avallbona.github.io/formateig-per-defecte-de-les-dates-amb-django.html" rel="alternate"></link><published>2015-09-13T21:32:00+02:00</published><updated>2015-09-13T21:32:00+02:00</updated><author><name>blogadmin</name></author><id>tag:avallbona.github.io,2015-09-13:/formateig-per-defecte-de-les-dates-amb-django.html</id><summary type="html">&lt;p&gt;Al principi de començar amb &lt;strong&gt;Django&lt;/strong&gt; me vaig trobar amb el problema
+del format de les dates. Per a la part de frontend no és massa
+problemàtic ja que podem fixar noltros el format de cada data en
+particular. Per exemple:&lt;br&gt;
+[sourcecode language="python"]&lt;br&gt;
+&amp;lt;p&amp;gt;{% trans 'Fecha salida' %}: {{
+reservation.departure_date_res …&lt;/p&gt;</summary><content type="html">&lt;p&gt;Al principi de començar amb &lt;strong&gt;Django&lt;/strong&gt; me vaig trobar amb el problema
+del format de les dates. Per a la part de frontend no és massa
+problemàtic ja que podem fixar noltros el format de cada data en
+particular. Per exemple:&lt;br&gt;
+[sourcecode language="python"]&lt;br&gt;
+&amp;lt;p&amp;gt;{% trans 'Fecha salida' %}: {{
+reservation.departure_date_res|date:'d/m/Y' }}&amp;lt;/p&amp;gt;&lt;br&gt;
+[/sourcecode]&lt;br&gt;
+El problema sorgeix amb, per exemple, el format de les dates de
+l'administrador, el qual està determinat pels valors per defecte de
+django. &lt;!--more--&gt;&lt;/p&gt;
+&lt;p&gt;Aquests solen variar en funció de l'idioma de l'usuari i/o del
+navegador. Per corregir aquests fet, &lt;strong&gt;Django&lt;/strong&gt; ens proporciona un
+mètode per poder fixar els formats per defecte de les dates. Al
+directori on està definit el projecte s'ha de creat una carpeta
+"formats" que contingui un directori per a cada idioma (es, ca, de, en,
+...) i que, cadascuna d'aquestes contingui un arxiu "formats.py" amb els
+formats de les dates. Per exemple:&lt;br&gt;
+&lt;a href="http://www.espontas.com/wp-content/uploads/captura-date-formats.png"&gt;&lt;img alt="captura date
+formats" src="http://www.espontas.com/wp-content/uploads/captura-date-formats.png"&gt;{.alignleft
+.size-full .wp-image-378 width="861"
+height="462"}&lt;/a&gt;&lt;br&gt;
+Llavors al settings.py s'ha d'afegir una linia per indicar d'on s'ha
+d'agafar el format de les dates:&lt;/p&gt;
+&lt;p&gt;[sourcecode language="python"]&lt;br&gt;
+FORMAT_MODULE_PATH = 'balearictransfer.formats'&lt;br&gt;
+[/sourcecode]&lt;/p&gt;
+&lt;p&gt;També es poden indicar el format de les dates pels "inputs" de les
+dates, així com el separador decimal o de mils, per exemple:&lt;/p&gt;
+&lt;p&gt;[sourcecode language="python"]&lt;br&gt;
+DATE_INPUT_FORMATS = (&lt;br&gt;
+'%d-%m-%Y', # '21-03-2014'&lt;br&gt;
+)&lt;br&gt;
+TIME_INPUT_FORMATS = (&lt;br&gt;
+'%H:%M:%S', # '17:59:59'&lt;br&gt;
+'%H:%M', # '17:59'&lt;br&gt;
+)&lt;br&gt;
+DATETIME_INPUT_FORMATS = (&lt;br&gt;
+'%d-%m-%Y %H:%M', # '21-03-2014 17:59'&lt;br&gt;
+)&lt;/p&gt;
+&lt;p&gt;DECIMAL_SEPARATOR = u'.'&lt;br&gt;
+THOUSAND_SEPARATOR = u','&lt;br&gt;
+NUMBER_GROUPING = 3&lt;br&gt;
+[/sourcecode]&lt;/p&gt;
+&lt;p&gt;A &lt;strong&gt;Github&lt;/strong&gt; podeu trobar un &lt;a href="https://github.com/andilabs/demo_time_set"&gt;projecte de
+mostra&lt;/a&gt; que explica com
+funciona el tema. I també la &lt;a href="http://stackoverflow.com/a/22565251"&gt;pertinent
+explicació&lt;/a&gt; a &lt;strong&gt;Stack Overflow&lt;/strong&gt;&lt;/p&gt;</content><category term="date format"></category><category term="django"></category><category term="strftime"></category></entry><entry><title>Django extra views</title><link href="https://avallbona.github.io/django-extra-views.html" rel="alternate"></link><published>2015-09-12T20:56:00+02:00</published><updated>2015-09-12T20:56:00+02:00</updated><author><name>blogadmin</name></author><id>tag:avallbona.github.io,2015-09-12:/django-extra-views.html</id><summary type="html">&lt;p&gt;"&lt;strong&gt;&lt;a href="https://github.com/AndrewIngram/django-extra-views"&gt;Django extra
+views&lt;/a&gt;&lt;/strong&gt;" ens
+proporciona una manera fàcil, a través de les seves vistes
+"vitaminades", d'implementar els
+"&lt;strong&gt;&lt;a href="https://docs.djangoproject.com/en/1.8/topics/forms/formsets/"&gt;formsets&lt;/a&gt;&lt;/strong&gt;"
+per tal d'editar les relacions 1-n amb Django. Tambe tenir
+&lt;strong&gt;&lt;a href="https://github.com/pretix/django-formset-js"&gt;django-formset-js&lt;/a&gt;&lt;/strong&gt; que
+ens "dinamitza" a través de Javascript la inserció i eliminació de
+tuples dels&lt;strong&gt; "formsets"&lt;/strong&gt;.&lt;!--more--&gt;&lt;/p&gt;
+&lt;p&gt;Per instal.lar les "django extra …&lt;/p&gt;</summary><content type="html">&lt;p&gt;"&lt;strong&gt;&lt;a href="https://github.com/AndrewIngram/django-extra-views"&gt;Django extra
+views&lt;/a&gt;&lt;/strong&gt;" ens
+proporciona una manera fàcil, a través de les seves vistes
+"vitaminades", d'implementar els
+"&lt;strong&gt;&lt;a href="https://docs.djangoproject.com/en/1.8/topics/forms/formsets/"&gt;formsets&lt;/a&gt;&lt;/strong&gt;"
+per tal d'editar les relacions 1-n amb Django. Tambe tenir
+&lt;strong&gt;&lt;a href="https://github.com/pretix/django-formset-js"&gt;django-formset-js&lt;/a&gt;&lt;/strong&gt; que
+ens "dinamitza" a través de Javascript la inserció i eliminació de
+tuples dels&lt;strong&gt; "formsets"&lt;/strong&gt;.&lt;!--more--&gt;&lt;/p&gt;
+&lt;p&gt;Per instal.lar les "django extra views" cal executar:&lt;/p&gt;
+&lt;p&gt;[sourcecode language="bash" wraplines="false" collapse="false"]&lt;br&gt;
+pip install django-extra-views&lt;br&gt;
+[/sourcecode]&lt;/p&gt;
+&lt;p&gt;Per instal.lar django-formset-js cal executar:&lt;br&gt;
+[sourcecode language="bash" wraplines="false" collapse="false"]&lt;br&gt;
+pip install django-formset-js&lt;br&gt;
+[/sourcecode]&lt;br&gt;
+i afegir l'aplicació al projecte:&lt;br&gt;
+[sourcecode language="python" wraplines="false" collapse="false"]&lt;br&gt;
+INSTALLED_APPS = (&lt;br&gt;
+...&lt;br&gt;
+'djangoformsetjs',&lt;br&gt;
+)&lt;br&gt;
+[/sourcecode]&lt;/p&gt;
+&lt;p&gt;Detallant els passos, que serien:&lt;br&gt;
+&lt;strong&gt;Views&lt;/strong&gt;:&lt;/p&gt;
+&lt;p&gt;[sourcecode language="python" wraplines="false" collapse="false"]&lt;br&gt;
+# -*- encoding: utf-8 -*-&lt;/p&gt;
+&lt;p&gt;from crispy_forms.helper import FormHelper&lt;br&gt;
+from crispy_forms.layout import Layout&lt;br&gt;
+from crispy_forms.layout import Div&lt;/p&gt;
+&lt;p&gt;from django import forms&lt;/p&gt;
+&lt;p&gt;from extra_views import CreateWithInlinesView, UpdateWithInlinesView,
+InlineFormSet&lt;br&gt;
+from backoffice.cars.models import AssuranceFeaturePrice,
+EquipmentPrice, ChargePrice&lt;br&gt;
+from cms.cmscars.office.forms import AssuranceFeaturePriceForm,
+EquipmentPriceForm, ChargePriceForm&lt;/p&gt;
+&lt;p&gt;#########&lt;br&gt;
+# views #&lt;br&gt;
+#########&lt;/p&gt;
+&lt;p&gt;class AssuranceFeaturePricesInline(InlineFormSet):&lt;br&gt;
+model = AssuranceFeaturePrice&lt;br&gt;
+form_class = AssuranceFeaturePriceForm&lt;br&gt;
+extra = 0&lt;/p&gt;
+&lt;p&gt;class EquipmentPricesInline(InlineFormSet):&lt;br&gt;
+model = EquipmentPrice&lt;br&gt;
+form_class = EquipmentPriceForm&lt;br&gt;
+extra = 0&lt;/p&gt;
+&lt;p&gt;class ChargePricesInline(InlineFormSet):&lt;br&gt;
+model = ChargePrice&lt;br&gt;
+form_class = ChargePriceForm&lt;br&gt;
+extra = 0&lt;/p&gt;
+&lt;p&gt;class OfficeCreateView(CreateWithInlinesView):&lt;br&gt;
+inlines = [AssuranceFeaturePricesInline, EquipmentPricesInline,
+ChargePricesInline]&lt;br&gt;
+pass&lt;/p&gt;
+&lt;p&gt;class OfficeUpdateView(UpdateWithInlinesView):&lt;br&gt;
+inlines = [AssuranceFeaturePricesInline, EquipmentPricesInline,
+ChargePricesInline]&lt;br&gt;
+pass&lt;br&gt;
+[/sourcecode]&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Forms&lt;/strong&gt;:&lt;/p&gt;
+&lt;p&gt;[sourcecode language="python" wraplines="false" collapse="false"]&lt;br&gt;
+class AssuranceFeaturePriceForm(forms.ModelForm):&lt;/p&gt;
+&lt;p&gt;class Meta:&lt;br&gt;
+model = AssuranceFeaturePrice&lt;br&gt;
+fields = ('id', 'office', 'feature', 'price')&lt;/p&gt;
+&lt;p&gt;@property&lt;br&gt;
+def helper(self):&lt;br&gt;
+helper = FormHelper()&lt;br&gt;
+helper.label_class = 'col-xs-4'&lt;br&gt;
+helper.field_class = 'col-xs-6'&lt;br&gt;
+helper.form_tag = False&lt;br&gt;
+helper.layout = Layout(&lt;br&gt;
+'id', 'office', 'feature', 'price',&lt;br&gt;
+Div('DELETE', css_class='hidden')&lt;br&gt;
+)&lt;br&gt;
+return helper&lt;/p&gt;
+&lt;p&gt;class EquipmentPriceForm(forms.ModelForm):&lt;/p&gt;
+&lt;p&gt;class Meta:&lt;br&gt;
+model = EquipmentPrice&lt;br&gt;
+fields = ('id', 'office', 'equipment', 'price')&lt;/p&gt;
+&lt;p&gt;@property&lt;br&gt;
+def helper(self):&lt;br&gt;
+helper = FormHelper()&lt;br&gt;
+helper.label_class = 'col-xs-4'&lt;br&gt;
+helper.field_class = 'col-xs-6'&lt;br&gt;
+helper.form_tag = False&lt;br&gt;
+helper.layout = Layout(&lt;br&gt;
+'id', 'office', 'equipment', 'price',&lt;br&gt;
+Div('DELETE', css_class='hidden')&lt;br&gt;
+)&lt;br&gt;
+return helper&lt;/p&gt;
+&lt;p&gt;class ChargePriceForm(forms.ModelForm):&lt;/p&gt;
+&lt;p&gt;class Meta:&lt;br&gt;
+model = ChargePrice&lt;br&gt;
+fields = ('id', 'office', 'charge', 'price')&lt;/p&gt;
+&lt;p&gt;@property&lt;br&gt;
+def helper(self):&lt;br&gt;
+helper = FormHelper()&lt;br&gt;
+helper.label_class = 'col-xs-4'&lt;br&gt;
+helper.field_class = 'col-xs-6'&lt;br&gt;
+helper.form_tag = False&lt;br&gt;
+helper.layout = Layout(&lt;br&gt;
+'id', 'office', 'charge', 'price',&lt;br&gt;
+Div('DELETE', css_class='hidden')&lt;br&gt;
+)&lt;br&gt;
+return helper&lt;/p&gt;
+&lt;p&gt;[/sourcecode]&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Template&lt;/strong&gt;:&lt;/p&gt;
+&lt;p&gt;[sourcecode language="python" wraplines="false" collapse="false"]&lt;br&gt;
+############&lt;br&gt;
+# template #&lt;br&gt;
+############&lt;/p&gt;
+&lt;p&gt;{% block content2 %}&lt;br&gt;
+{{ form.media }}&lt;/p&gt;
+&lt;p&gt;&amp;lt;form id="form-office" method="post" action="{% if object %}{% url
+update_url smydestination object.pk %}{% else %}{% url create_url
+smydestination %}{% endif %}" class="form-horizontal"&amp;gt;&lt;br&gt;
+{{ form.errors }}&lt;br&gt;
+{% crispy form %}&lt;br&gt;
+&amp;lt;!-- formsets --&amp;gt;&lt;/p&gt;
+&lt;p _="%" for formset in inlines&gt;&amp;lt;div id="initial-precios" class="x_panel col-md-offset-2
+col-md-7"&amp;gt;&lt;br&gt;&lt;/p&gt;
+&lt;p&gt;&amp;lt;div id="container-{{ formset.prefix }}"&amp;gt;&lt;/p&gt;
+&lt;p&gt;&amp;lt;div class="x_title"&amp;gt;&lt;/p&gt;
+&lt;p&gt;&amp;lt;h4&amp;gt;{% show_formset_name formset %}&amp;lt;/h4&amp;gt;&lt;/p&gt;
+&lt;p&gt;&amp;lt;/div&amp;gt;&lt;/p&gt;
+&lt;p&gt;&amp;lt;div class="formset well" data-formset-prefix="{{ formset.prefix
+}}"&amp;gt;&lt;/p&gt;
+&lt;p&gt;&amp;lt;div class="errors"&amp;gt;{{ formset.non_form_errors }}&amp;lt;/div&amp;gt;&lt;/p&gt;
+&lt;p&gt;{{ formset.management_form }}&lt;/p&gt;
+&lt;p _="%" for formset in item&gt;&amp;lt;div data-formset-body&amp;gt;&lt;br&gt;&lt;/p&gt;
+&lt;p&gt;&amp;lt;div class="formset_item form-inline" data-formset-form&amp;gt;&lt;br&gt;
+{% crispy item %}&lt;br&gt;
+&amp;lt;button type="button" data-formset-delete-button class="btn
+btn-danger pull-right"&amp;gt;&amp;lt;i class="fa fa-trash"&amp;gt;&amp;lt;/i&amp;gt; {%
+trans 'Borrar' %}&amp;lt;/button&amp;gt;&lt;br&gt;
+&amp;lt;/div&amp;gt;&lt;/p&gt;
+&lt;p&gt;{% endfor %}&lt;br&gt;
+&amp;lt;/div&amp;gt;&lt;/p&gt;
+&lt;p _="%" escapescript&gt;&amp;lt;script type="form-template" data-formset-empty-form&amp;gt;&lt;br&gt;&lt;/p&gt;
+&lt;p&gt;&amp;lt;div class="formset_item form-inline" data-formset-form&amp;gt;&lt;br&gt;
+{% crispy formset.empty_form %}&lt;br&gt;
+&amp;lt;button type="button" data-formset-delete-button class="btn
+btn-danger pull-right"&amp;gt;&amp;lt;i class="fa fa-trash"&amp;gt;&amp;lt;/i&amp;gt; {%
+trans 'Borrar' %}&amp;lt;/button&amp;gt;&lt;br&gt;
+&amp;lt;/div&amp;gt;&lt;/p&gt;
+&lt;p&gt;{% endescapescript %}&lt;br&gt;
+&amp;lt;/script&amp;gt;&lt;br&gt;
+&amp;lt;a class="btn btn-success" data-formset-add&amp;gt;&lt;br&gt;
+&amp;lt;i class="fa fa-plus-square-o"&amp;gt;&amp;lt;/i&amp;gt; {% trans 'Añadir
+registro' %}&lt;br&gt;
+&amp;lt;/a&amp;gt;&lt;br&gt;
+&amp;lt;/div&amp;gt;&lt;/p&gt;
+&lt;p&gt;&amp;lt;/div&amp;gt;&lt;/p&gt;
+&lt;p&gt;{% endfor %}&lt;br&gt;
+&amp;lt;/div&amp;gt;&lt;/p&gt;
+&lt;p&gt;&amp;lt;!-- fin formsets --&amp;gt;&lt;br&gt;
+&amp;lt;/form&amp;gt;&lt;/p&gt;
+&lt;p&gt;{% endblock content2 %}&lt;/p&gt;
+&lt;p&gt;{% block extrajs %}&lt;br&gt;
+&amp;lt;script type="text/javascript" src="{% static
+'js/jquery.formset.min.js' %}"&amp;gt;&amp;lt;/script&amp;gt;&lt;br&gt;
+&amp;lt;script type="text/javascript"&amp;gt;&lt;br&gt;
+//&amp;lt;![CDATA[ \$(function(\$) { \$(".formset").formset({
+animateForms: true, reorderMode: 'none', }); }); //]]&amp;gt;&lt;br&gt;
+&amp;lt;/script&amp;gt;&lt;br&gt;
+{% endblock %}&lt;br&gt;
+[/sourcecode]&lt;/p&gt;
+&lt;p&gt;A aquest exemple també es fa ús de &lt;a href="http://django-crispy-forms.readthedocs.org/en/latest/"&gt;Crispy
+Forms&lt;/a&gt;, per tal
+de millorar l'aparença dels formularis. Per instal.lar-ho:&lt;/p&gt;
+&lt;p&gt;[sourcecode language="python" wraplines="false" collapse="false"]&lt;br&gt;
+pip install --upgrade django-crispy-forms&lt;br&gt;
+[/sourcecode]&lt;br&gt;
+i afegir l'aplicació al projecte:&lt;br&gt;
+[sourcecode language="python" wraplines="false" collapse="false"]&lt;br&gt;
+INSTALLED_APPS = (&lt;br&gt;
+...&lt;br&gt;
+'crispy_forms',&lt;br&gt;
+)&lt;br&gt;
+[/sourcecode]&lt;/p&gt;
+&lt;p&gt;En aquest cas hi ha varis "formsets" relacionats amb el model principal.
+Per qüestió d'usabilitat s'ha implementat el formset dins un "Tab" del
+formulari principal. L'exemple exposat queda segons es mostra a
+l'imatge.&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://www.espontas.com/wp-content/uploads/captura_formsets_cropped.png"&gt;&lt;img alt="captura_formsets_cropped" src="http://www.espontas.com/wp-content/uploads/captura_formsets_cropped-1024x699.png"&gt;{.alignleft
+.size-large .wp-image-344 width="660"
+height="451"}&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Per aprofondir en els paquets citats a l'exemple es recomana visitar els
+enllaços als mateixos.&lt;/p&gt;</content><category term="django extra viwws"></category><category term="django formset js"></category><category term="formset"></category></entry></feed>

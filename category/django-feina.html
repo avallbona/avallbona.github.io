@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <title>Andreu Vallbona - Django, Feina</title>
+        <link rel="stylesheet" href="https://avallbona.github.io/theme/css/main.css" />
+        <link href="https://avallbona.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Andreu Vallbona Atom Feed" />
+
+        <!--[if IE]>
+            <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="https://avallbona.github.io/">Andreu Vallbona </a></h1>
+                <nav><ul>
+                    <li><a href="https://avallbona.github.io/pages/about-me.html">About me</a></li>
+                    <li><a href="https://avallbona.github.io/category/django.html">Django</a></li>
+                    <li class="active"><a href="https://avallbona.github.io/category/django-feina.html">Django, Feina</a></li>
+                    <li><a href="https://avallbona.github.io/category/feina.html">Feina</a></li>
+                    <li><a href="https://avallbona.github.io/category/uncategorized.html">Uncategorized</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+
+            <aside id="featured" class="body">
+                <article>
+                    <h1 class="entry-title"><a href="https://avallbona.github.io/deteccio-idioma-per-subdomini-en-django.html">Detecció idioma per subdomini en Django</a></h1>
+<footer class="post-info">
+        <abbr class="published" title="2015-12-30T11:20:00+01:00">
+                Published: mié 30 diciembre 2015
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="https://avallbona.github.io/author/blogadmin.html">blogadmin</a>
+        </address>
+<p>In <a href="https://avallbona.github.io/category/django-feina.html">Django, Feina</a>.</p>
+
+</footer><!-- /.post-info --><p>Django ens proporciona eines per detectar i fixar l'idioma de la nostra
+aplicació. Normalment es fa servir
+<strong><a href="https://docs.djangoproject.com/en/1.9/topics/i18n/translation/">i18n_patterns</a></strong>
+a través del qual s'encapsulen les urls amb el mateix per tal que ens
+fixi a l'inici del path de la url el codi d'idioma. Amb el middleware
+que explicarem no cal fer servir l'<strong>i18n_patterns</strong> ja que serà el
+pròpi "middleware" que detectarà i fixarà l'idioma de l'aplicació.
+<!--more--></p>
+<p>Primer de tot crearem l'arxiu que contindrà el "middleware":</p>
+<p>[sourcecode language="python"]</p>
+<p># -*- encoding: utf-8 -*-</p>
+<p>from django.utils import translation<br>
+from django.conf import settings</p>
+<p>class SubdomainLanguageMiddleware(object):<br>
+"""<br>
+Set the language for the site based on the subdomain the request<br>
+is being served on. For example, serving on 'fr.domain.com' would<br>
+make the language French (fr).<br>
+"""<br>
+language_codes = [it[0] for it in settings.LANGUAGES]</p>
+<p>def process_request(self, request):<br>
+try:<br>
+lang = request.get_host().split('.')[0]<br>
+except IndexError:<br>
+lang = self.language_codes[0]<br>
+if lang == 'www':<br>
+lang = self.language_codes[0]<br>
+if lang and lang in self.language_codes:<br>
+translation.activate(lang)<br>
+request.LANGUAGE_CODE = lang</p>
+<p>[/sourcecode]</p>
+<p>Fixem-nos en el cas que no s'ens indica cap codi d'idioma i ens ve
+"www", que fixem el primer idioma per defecte definit als "settings.py".</p>
+<p>Llavors, als "settings.py" hem de tenir configurats els idiomes amb els
+quals volem fer feina:</p>
+<p>[sourcecode language="python"]<br>
+LANGUAGES = (<br>
+('ca', 'Català'),<br>
+('es', 'Español'),<br>
+('de', 'Deutsch'),<br>
+('en', 'English'),<br>
+)<br>
+[/sourcecode]</p>
+<p>i, com a darrer pas, li hem d'indicar als "settings.py" que ens agafi el
+"middleware" que acabem de crear:</p>
+<p>[sourcecode language="python"]<br>
+MIDDLEWARE_CLASSES = (<br>
+...,<br>
+'myproject.language_middleware.SubdomainLanguageMiddleware',<br>
+)<br>
+[/sourcecode]</p>
+<p>Llavors ja podrem accedir a la web fixant l'idioma en el subdomini:</p>
+<p>[sourcecode language="html"]<br>
+http://www.lamevaweb.com<br>
+http://es.lamevaweb.com<br>
+http://de.lamevaweb.com<br>
+http://en.lamevaweb.com<br>
+[/sourcecode]</p>                </article>
+            </aside><!-- /#featured -->
+                <section id="content" class="body">
+                    <h1>Other articles</h1>
+                    <hr />
+                    <ol id="posts-list" class="hfeed">
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="https://avallbona.github.io/customitzacio-de-backend-dautenticacio-amb-django.html" rel="bookmark"
+                           title="Permalink to Customització de backend d'autenticació amb Django">Customització de backend d'autenticació amb Django</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2015-12-30T10:11:00+01:00">
+                Published: mié 30 diciembre 2015
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="https://avallbona.github.io/author/blogadmin.html">blogadmin</a>
+        </address>
+<p>In <a href="https://avallbona.github.io/category/django-feina.html">Django, Feina</a>.</p>
+
+</footer><!-- /.post-info -->                <p>Per defecte Django empra el backend d'autenticació "ModelBackend"</p>
+<p>[sourcecode language="python"]<br>
+AUTHENTICATION_BACKENDS = (<br>
+'django.contrib.auth.backends.ModelBackend',<br>
+)<br>
+[/sourcecode]</p>
+<p>Aquest "backend" intenta autenticara partir del nom d'usuari i la
+contrasenya que reb. Nogensmenys es pot donar el cas que vulguem
+autenticar a partir de l'email de l'usuari.<!--more--></p>
+<p>Per aquest cas ho …</p>
+                <a class="readmore" href="https://avallbona.github.io/customitzacio-de-backend-dautenticacio-amb-django.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="https://avallbona.github.io/formateig-per-defecte-de-les-dates-amb-django.html" rel="bookmark"
+                           title="Permalink to Formateig per defecte de les dates amb Django">Formateig per defecte de les dates amb Django</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2015-09-13T21:32:00+02:00">
+                Published: dom 13 septiembre 2015
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="https://avallbona.github.io/author/blogadmin.html">blogadmin</a>
+        </address>
+<p>In <a href="https://avallbona.github.io/category/django-feina.html">Django, Feina</a>.</p>
+<p>tags: <a href="https://avallbona.github.io/tag/date-format.html">date format</a> <a href="https://avallbona.github.io/tag/django.html">django</a> <a href="https://avallbona.github.io/tag/strftime.html">strftime</a> </p>
+</footer><!-- /.post-info -->                <p>Al principi de començar amb <strong>Django</strong> me vaig trobar amb el problema
+del format de les dates. Per a la part de frontend no és massa
+problemàtic ja que podem fixar noltros el format de cada data en
+particular. Per exemple:<br>
+[sourcecode language="python"]<br>
+&lt;p&gt;{% trans 'Fecha salida' %}: {{
+reservation.departure_date_res …</p>
+                <a class="readmore" href="https://avallbona.github.io/formateig-per-defecte-de-les-dates-amb-django.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="https://avallbona.github.io/django-extra-views.html" rel="bookmark"
+                           title="Permalink to Django extra views">Django extra views</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2015-09-12T20:56:00+02:00">
+                Published: sáb 12 septiembre 2015
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="https://avallbona.github.io/author/blogadmin.html">blogadmin</a>
+        </address>
+<p>In <a href="https://avallbona.github.io/category/django-feina.html">Django, Feina</a>.</p>
+<p>tags: <a href="https://avallbona.github.io/tag/django-extra-viwws.html">django extra viwws</a> <a href="https://avallbona.github.io/tag/django-formset-js.html">django formset js</a> <a href="https://avallbona.github.io/tag/formset.html">formset</a> </p>
+</footer><!-- /.post-info -->                <p>"<strong><a href="https://github.com/AndrewIngram/django-extra-views">Django extra
+views</a></strong>" ens
+proporciona una manera fàcil, a través de les seves vistes
+"vitaminades", d'implementar els
+"<strong><a href="https://docs.djangoproject.com/en/1.8/topics/forms/formsets/">formsets</a></strong>"
+per tal d'editar les relacions 1-n amb Django. Tambe tenir
+<strong><a href="https://github.com/pretix/django-formset-js">django-formset-js</a></strong> que
+ens "dinamitza" a través de Javascript la inserció i eliminació de
+tuples dels<strong> "formsets"</strong>.<!--more--></p>
+<p>Per instal.lar les "django extra …</p>
+                <a class="readmore" href="https://avallbona.github.io/django-extra-views.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+                </ol><!-- /#posts-list -->
+                </section><!-- /#content -->
+        <section id="extras" class="body">
+                <div class="blogroll">
+                        <h2>links</h2>
+                        <ul>
+                            <li><a href="http://getpelican.com/">Pelican</a></li>
+                            <li><a href="http://python.org/">Python.org</a></li>
+                            <li><a href="http://jinja.pocoo.org/">Jinja2</a></li>
+                        </ul>
+                </div><!-- /.blogroll -->
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="https://avallbona.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                            <li><a href="https://github.com/avallbona">github</a></li>
+                            <li><a href="https://twitter.com/avallbona">twitter</a></li>
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>
