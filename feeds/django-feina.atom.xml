@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>Andreu Vallbona - Django, Feina</title><link href="https://avallbona.github.io/" rel="alternate"></link><link href="https://avallbona.github.io/feeds/django-feina.atom.xml" rel="self"></link><id>https://avallbona.github.io/</id><updated>2015-12-30T11:20:00+01:00</updated><entry><title>Detecció idioma per subdomini en Django</title><link href="https://avallbona.github.io/deteccio-idioma-per-subdomini-en-django.html" rel="alternate"></link><published>2015-12-30T11:20:00+01:00</published><updated>2015-12-30T11:20:00+01:00</updated><author><name>blogadmin</name></author><id>tag:avallbona.github.io,2015-12-30:/deteccio-idioma-per-subdomini-en-django.html</id><summary type="html">&lt;p&gt;Django ens proporciona eines per detectar i fixar l'idioma de la nostra
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Andreu Vallbona - Django, Feina</title><link href="https://blog.espontas.com/" rel="alternate"></link><link href="https://blog.espontas.com/feeds/django-feina.atom.xml" rel="self"></link><id>https://blog.espontas.com/</id><updated>2015-12-30T11:20:00+01:00</updated><entry><title>Detecció idioma per subdomini en Django</title><link href="https://blog.espontas.com/blog/deteccio-idioma-per-subdomini-en-django" rel="alternate"></link><published>2015-12-30T11:20:00+01:00</published><updated>2015-12-30T11:20:00+01:00</updated><author><name>blogadmin</name></author><id>tag:blog.espontas.com,2015-12-30:/blog/deteccio-idioma-per-subdomini-en-django</id><summary type="html">&lt;p&gt;Django ens proporciona eines per detectar i fixar l'idioma de la nostra
 aplicació. Normalment es fa servir
 &lt;strong&gt;&lt;a href="https://docs.djangoproject.com/en/1.9/topics/i18n/translation/"&gt;i18n_patterns&lt;/a&gt;&lt;/strong&gt;
 a través del qual s'encapsulen les urls amb el mateix per tal que ens
@@ -61,7 +61,7 @@ http://www.lamevaweb.com&lt;br&gt;
 http://es.lamevaweb.com&lt;br&gt;
 http://de.lamevaweb.com&lt;br&gt;
 http://en.lamevaweb.com&lt;br&gt;
-[/sourcecode]&lt;/p&gt;</content></entry><entry><title>Customització de backend d'autenticació amb Django</title><link href="https://avallbona.github.io/customitzacio-de-backend-dautenticacio-amb-django.html" rel="alternate"></link><published>2015-12-30T10:11:00+01:00</published><updated>2015-12-30T10:11:00+01:00</updated><author><name>blogadmin</name></author><id>tag:avallbona.github.io,2015-12-30:/customitzacio-de-backend-dautenticacio-amb-django.html</id><summary type="html">&lt;p&gt;Per defecte Django empra el backend d'autenticació "ModelBackend"&lt;/p&gt;
+[/sourcecode]&lt;/p&gt;</content></entry><entry><title>Customització de backend d'autenticació amb Django</title><link href="https://blog.espontas.com/blog/customitzacio-de-backend-dautenticacio-amb-django" rel="alternate"></link><published>2015-12-30T10:11:00+01:00</published><updated>2015-12-30T10:11:00+01:00</updated><author><name>blogadmin</name></author><id>tag:blog.espontas.com,2015-12-30:/blog/customitzacio-de-backend-dautenticacio-amb-django</id><summary type="html">&lt;p&gt;Per defecte Django empra el backend d'autenticació "ModelBackend"&lt;/p&gt;
 &lt;p&gt;[sourcecode language="python"]&lt;br&gt;
 AUTHENTICATION_BACKENDS = (&lt;br&gt;
 'django.contrib.auth.backends.ModelBackend',&lt;br&gt;
@@ -105,7 +105,7 @@ AUTHENTICATION_BACKENDS = (&lt;br&gt;
 )&lt;br&gt;
 [/sourcecode]&lt;br&gt;
 Aleshores si el nostre formulari posteja l'email i la contrasenya ja ens
-podrem autenticar.&lt;/p&gt;</content></entry><entry><title>Formateig per defecte de les dates amb Django</title><link href="https://avallbona.github.io/formateig-per-defecte-de-les-dates-amb-django.html" rel="alternate"></link><published>2015-09-13T21:32:00+02:00</published><updated>2015-09-13T21:32:00+02:00</updated><author><name>blogadmin</name></author><id>tag:avallbona.github.io,2015-09-13:/formateig-per-defecte-de-les-dates-amb-django.html</id><summary type="html">&lt;p&gt;Al principi de començar amb &lt;strong&gt;Django&lt;/strong&gt; me vaig trobar amb el problema
+podrem autenticar.&lt;/p&gt;</content></entry><entry><title>Formateig per defecte de les dates amb Django</title><link href="https://blog.espontas.com/blog/formateig-per-defecte-de-les-dates-amb-django" rel="alternate"></link><published>2015-09-13T21:32:00+02:00</published><updated>2015-09-13T21:32:00+02:00</updated><author><name>blogadmin</name></author><id>tag:blog.espontas.com,2015-09-13:/blog/formateig-per-defecte-de-les-dates-amb-django</id><summary type="html">&lt;p&gt;Al principi de començar amb &lt;strong&gt;Django&lt;/strong&gt; me vaig trobar amb el problema
 del format de les dates. Per a la part de frontend no és massa
 problemàtic ja que podem fixar noltros el format de cada data en
 particular. Per exemple:&lt;br&gt;
@@ -158,7 +158,7 @@ NUMBER_GROUPING = 3&lt;br&gt;
 &lt;p&gt;A &lt;strong&gt;Github&lt;/strong&gt; podeu trobar un &lt;a href="https://github.com/andilabs/demo_time_set"&gt;projecte de
 mostra&lt;/a&gt; que explica com
 funciona el tema. I també la &lt;a href="http://stackoverflow.com/a/22565251"&gt;pertinent
-explicació&lt;/a&gt; a &lt;strong&gt;Stack Overflow&lt;/strong&gt;&lt;/p&gt;</content><category term="date format"></category><category term="django"></category><category term="strftime"></category></entry><entry><title>Django extra views</title><link href="https://avallbona.github.io/django-extra-views.html" rel="alternate"></link><published>2015-09-12T20:56:00+02:00</published><updated>2015-09-12T20:56:00+02:00</updated><author><name>blogadmin</name></author><id>tag:avallbona.github.io,2015-09-12:/django-extra-views.html</id><summary type="html">&lt;p&gt;"&lt;strong&gt;&lt;a href="https://github.com/AndrewIngram/django-extra-views"&gt;Django extra
+explicació&lt;/a&gt; a &lt;strong&gt;Stack Overflow&lt;/strong&gt;&lt;/p&gt;</content><category term="date format"></category><category term="django"></category><category term="strftime"></category></entry><entry><title>Django extra views</title><link href="https://blog.espontas.com/blog/django-extra-views" rel="alternate"></link><published>2015-09-12T20:56:00+02:00</published><updated>2015-09-12T20:56:00+02:00</updated><author><name>blogadmin</name></author><id>tag:blog.espontas.com,2015-09-12:/blog/django-extra-views</id><summary type="html">&lt;p&gt;"&lt;strong&gt;&lt;a href="https://github.com/AndrewIngram/django-extra-views"&gt;Django extra
 views&lt;/a&gt;&lt;/strong&gt;" ens
 proporciona una manera fàcil, a través de les seves vistes
 "vitaminades", d'implementar els

@@ -1,262 +1,173 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-        <meta charset="utf-8" />
-        <title>Andreu Vallbona - formset</title>
-        <link rel="stylesheet" href="https://avallbona.github.io/theme/css/main.css" />
-        <link href="https://avallbona.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Andreu Vallbona Atom Feed" />
+<!DOCTYPE HTML>
+<!--
+	halcyonic by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Andreu Vallbona - Blog entries tagged with "formset"</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="shortcut icon" href="/theme/img/favicon.ico" rel="icon" type="image/x-icon" />
+		<!--[if lte IE 8]><script src="/theme/js/ie/html5shiv.js"></script><![endif]-->
+		<link rel="stylesheet" href="/theme/css/main.css" />
+		<!--[if lte IE 9]><link rel="stylesheet" href="/theme/css/ie9.css" /><![endif]-->
+		<meta property="og:locale" content="en">
+		<meta property="og:site_name" content="Andreu Vallbona">
+	</head>
+	<body class="subpage">
+		<div id="page-wrapper">
 
-        <!--[if IE]>
-            <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-        <![endif]-->
-</head>
+			<!-- Header -->
+				<div id="header-wrapper">
+					<header id="header" class="container">
+						<div class="row">
+							<div class="12u">
 
-<body id="index" class="home">
-        <header id="banner" class="body">
-                <h1><a href="https://avallbona.github.io/">Andreu Vallbona </a></h1>
-                <nav><ul>
-                    <li><a href="https://avallbona.github.io/pages/about-me.html">About me</a></li>
-                    <li><a href="https://avallbona.github.io/category/django.html">Django</a></li>
-                    <li><a href="https://avallbona.github.io/category/django-feina.html">Django, Feina</a></li>
-                    <li><a href="https://avallbona.github.io/category/feina.html">Feina</a></li>
-                    <li><a href="https://avallbona.github.io/category/uncategorized.html">Uncategorized</a></li>
-                </ul></nav>
-        </header><!-- /#banner -->
+								<!-- Logo -->
+									<h1><a href="/" id="logo">Andreu Vallbona</a></h1>
 
-            <aside id="featured" class="body">
-                <article>
-                    <h1 class="entry-title"><a href="https://avallbona.github.io/django-extra-views.html">Django extra views</a></h1>
-<footer class="post-info">
-        <abbr class="published" title="2015-09-12T20:56:00+02:00">
-                Published: sáb 12 septiembre 2015
-        </abbr>
+								<!-- Nav -->
+									<nav id="nav">
+										<a href="/about-me">About me</a>
+										<a href="/tags">Tags</a>
+										<a href="/categories">Categories</a>
+										<a href="/archives">Archives</a>
+									</nav>
 
-        <address class="vcard author">
-                By                         <a class="url fn" href="https://avallbona.github.io/author/blogadmin.html">blogadmin</a>
-        </address>
-<p>In <a href="https://avallbona.github.io/category/django-feina.html">Django, Feina</a>.</p>
-<p>tags: <a href="https://avallbona.github.io/tag/django-extra-viwws.html">django extra viwws</a> <a href="https://avallbona.github.io/tag/django-formset-js.html">django formset js</a> <a href="https://avallbona.github.io/tag/formset.html">formset</a> </p>
-</footer><!-- /.post-info --><p>"<strong><a href="https://github.com/AndrewIngram/django-extra-views">Django extra
-views</a></strong>" ens
-proporciona una manera fàcil, a través de les seves vistes
-"vitaminades", d'implementar els
-"<strong><a href="https://docs.djangoproject.com/en/1.8/topics/forms/formsets/">formsets</a></strong>"
-per tal d'editar les relacions 1-n amb Django. Tambe tenir
-<strong><a href="https://github.com/pretix/django-formset-js">django-formset-js</a></strong> que
-ens "dinamitza" a través de Javascript la inserció i eliminació de
-tuples dels<strong> "formsets"</strong>.<!--more--></p>
-<p>Per instal.lar les "django extra views" cal executar:</p>
-<p>[sourcecode language="bash" wraplines="false" collapse="false"]<br>
-pip install django-extra-views<br>
-[/sourcecode]</p>
-<p>Per instal.lar django-formset-js cal executar:<br>
-[sourcecode language="bash" wraplines="false" collapse="false"]<br>
-pip install django-formset-js<br>
-[/sourcecode]<br>
-i afegir l'aplicació al projecte:<br>
-[sourcecode language="python" wraplines="false" collapse="false"]<br>
-INSTALLED_APPS = (<br>
-...<br>
-'djangoformsetjs',<br>
-)<br>
-[/sourcecode]</p>
-<p>Detallant els passos, que serien:<br>
-<strong>Views</strong>:</p>
-<p>[sourcecode language="python" wraplines="false" collapse="false"]<br>
-# -*- encoding: utf-8 -*-</p>
-<p>from crispy_forms.helper import FormHelper<br>
-from crispy_forms.layout import Layout<br>
-from crispy_forms.layout import Div</p>
-<p>from django import forms</p>
-<p>from extra_views import CreateWithInlinesView, UpdateWithInlinesView,
-InlineFormSet<br>
-from backoffice.cars.models import AssuranceFeaturePrice,
-EquipmentPrice, ChargePrice<br>
-from cms.cmscars.office.forms import AssuranceFeaturePriceForm,
-EquipmentPriceForm, ChargePriceForm</p>
-<p>#########<br>
-# views #<br>
-#########</p>
-<p>class AssuranceFeaturePricesInline(InlineFormSet):<br>
-model = AssuranceFeaturePrice<br>
-form_class = AssuranceFeaturePriceForm<br>
-extra = 0</p>
-<p>class EquipmentPricesInline(InlineFormSet):<br>
-model = EquipmentPrice<br>
-form_class = EquipmentPriceForm<br>
-extra = 0</p>
-<p>class ChargePricesInline(InlineFormSet):<br>
-model = ChargePrice<br>
-form_class = ChargePriceForm<br>
-extra = 0</p>
-<p>class OfficeCreateView(CreateWithInlinesView):<br>
-inlines = [AssuranceFeaturePricesInline, EquipmentPricesInline,
-ChargePricesInline]<br>
-pass</p>
-<p>class OfficeUpdateView(UpdateWithInlinesView):<br>
-inlines = [AssuranceFeaturePricesInline, EquipmentPricesInline,
-ChargePricesInline]<br>
-pass<br>
-[/sourcecode]</p>
-<p><strong>Forms</strong>:</p>
-<p>[sourcecode language="python" wraplines="false" collapse="false"]<br>
-class AssuranceFeaturePriceForm(forms.ModelForm):</p>
-<p>class Meta:<br>
-model = AssuranceFeaturePrice<br>
-fields = ('id', 'office', 'feature', 'price')</p>
-<p>@property<br>
-def helper(self):<br>
-helper = FormHelper()<br>
-helper.label_class = 'col-xs-4'<br>
-helper.field_class = 'col-xs-6'<br>
-helper.form_tag = False<br>
-helper.layout = Layout(<br>
-'id', 'office', 'feature', 'price',<br>
-Div('DELETE', css_class='hidden')<br>
-)<br>
-return helper</p>
-<p>class EquipmentPriceForm(forms.ModelForm):</p>
-<p>class Meta:<br>
-model = EquipmentPrice<br>
-fields = ('id', 'office', 'equipment', 'price')</p>
-<p>@property<br>
-def helper(self):<br>
-helper = FormHelper()<br>
-helper.label_class = 'col-xs-4'<br>
-helper.field_class = 'col-xs-6'<br>
-helper.form_tag = False<br>
-helper.layout = Layout(<br>
-'id', 'office', 'equipment', 'price',<br>
-Div('DELETE', css_class='hidden')<br>
-)<br>
-return helper</p>
-<p>class ChargePriceForm(forms.ModelForm):</p>
-<p>class Meta:<br>
-model = ChargePrice<br>
-fields = ('id', 'office', 'charge', 'price')</p>
-<p>@property<br>
-def helper(self):<br>
-helper = FormHelper()<br>
-helper.label_class = 'col-xs-4'<br>
-helper.field_class = 'col-xs-6'<br>
-helper.form_tag = False<br>
-helper.layout = Layout(<br>
-'id', 'office', 'charge', 'price',<br>
-Div('DELETE', css_class='hidden')<br>
-)<br>
-return helper</p>
-<p>[/sourcecode]</p>
-<p><strong>Template</strong>:</p>
-<p>[sourcecode language="python" wraplines="false" collapse="false"]<br>
-############<br>
-# template #<br>
-############</p>
-<p>{% block content2 %}<br>
-{{ form.media }}</p>
-<p>&lt;form id="form-office" method="post" action="{% if object %}{% url
-update_url smydestination object.pk %}{% else %}{% url create_url
-smydestination %}{% endif %}" class="form-horizontal"&gt;<br>
-{{ form.errors }}<br>
-{% crispy form %}<br>
-&lt;!-- formsets --&gt;</p>
-<p _="%" for formset in inlines>&lt;div id="initial-precios" class="x_panel col-md-offset-2
-col-md-7"&gt;<br></p>
-<p>&lt;div id="container-{{ formset.prefix }}"&gt;</p>
-<p>&lt;div class="x_title"&gt;</p>
-<p>&lt;h4&gt;{% show_formset_name formset %}&lt;/h4&gt;</p>
-<p>&lt;/div&gt;</p>
-<p>&lt;div class="formset well" data-formset-prefix="{{ formset.prefix
-}}"&gt;</p>
-<p>&lt;div class="errors"&gt;{{ formset.non_form_errors }}&lt;/div&gt;</p>
-<p>{{ formset.management_form }}</p>
-<p _="%" for formset in item>&lt;div data-formset-body&gt;<br></p>
-<p>&lt;div class="formset_item form-inline" data-formset-form&gt;<br>
-{% crispy item %}<br>
-&lt;button type="button" data-formset-delete-button class="btn
-btn-danger pull-right"&gt;&lt;i class="fa fa-trash"&gt;&lt;/i&gt; {%
-trans 'Borrar' %}&lt;/button&gt;<br>
-&lt;/div&gt;</p>
-<p>{% endfor %}<br>
-&lt;/div&gt;</p>
-<p _="%" escapescript>&lt;script type="form-template" data-formset-empty-form&gt;<br></p>
-<p>&lt;div class="formset_item form-inline" data-formset-form&gt;<br>
-{% crispy formset.empty_form %}<br>
-&lt;button type="button" data-formset-delete-button class="btn
-btn-danger pull-right"&gt;&lt;i class="fa fa-trash"&gt;&lt;/i&gt; {%
-trans 'Borrar' %}&lt;/button&gt;<br>
-&lt;/div&gt;</p>
-<p>{% endescapescript %}<br>
-&lt;/script&gt;<br>
-&lt;a class="btn btn-success" data-formset-add&gt;<br>
-&lt;i class="fa fa-plus-square-o"&gt;&lt;/i&gt; {% trans 'Añadir
-registro' %}<br>
-&lt;/a&gt;<br>
-&lt;/div&gt;</p>
-<p>&lt;/div&gt;</p>
-<p>{% endfor %}<br>
-&lt;/div&gt;</p>
-<p>&lt;!-- fin formsets --&gt;<br>
-&lt;/form&gt;</p>
-<p>{% endblock content2 %}</p>
-<p>{% block extrajs %}<br>
-&lt;script type="text/javascript" src="{% static
-'js/jquery.formset.min.js' %}"&gt;&lt;/script&gt;<br>
-&lt;script type="text/javascript"&gt;<br>
-//&lt;![CDATA[ \$(function(\$) { \$(".formset").formset({
-animateForms: true, reorderMode: 'none', }); }); //]]&gt;<br>
-&lt;/script&gt;<br>
-{% endblock %}<br>
-[/sourcecode]</p>
-<p>A aquest exemple també es fa ús de <a href="http://django-crispy-forms.readthedocs.org/en/latest/">Crispy
-Forms</a>, per tal
-de millorar l'aparença dels formularis. Per instal.lar-ho:</p>
-<p>[sourcecode language="python" wraplines="false" collapse="false"]<br>
-pip install --upgrade django-crispy-forms<br>
-[/sourcecode]<br>
-i afegir l'aplicació al projecte:<br>
-[sourcecode language="python" wraplines="false" collapse="false"]<br>
-INSTALLED_APPS = (<br>
-...<br>
-'crispy_forms',<br>
-)<br>
-[/sourcecode]</p>
-<p>En aquest cas hi ha varis "formsets" relacionats amb el model principal.
-Per qüestió d'usabilitat s'ha implementat el formset dins un "Tab" del
-formulari principal. L'exemple exposat queda segons es mostra a
-l'imatge.</p>
-<p><a href="http://www.espontas.com/wp-content/uploads/captura_formsets_cropped.png"><img alt="captura_formsets_cropped" src="http://www.espontas.com/wp-content/uploads/captura_formsets_cropped-1024x699.png">{.alignleft
-.size-large .wp-image-344 width="660"
-height="451"}</a></p>
-<p>Per aprofondir en els paquets citats a l'exemple es recomana visitar els
-enllaços als mateixos.</p>                </article>
-            </aside><!-- /#featured -->
-        <section id="extras" class="body">
-                <div class="blogroll">
-                        <h2>links</h2>
-                        <ul>
-                            <li><a href="http://getpelican.com/">Pelican</a></li>
-                            <li><a href="http://python.org/">Python.org</a></li>
-                            <li><a href="http://jinja.pocoo.org/">Jinja2</a></li>
-                        </ul>
-                </div><!-- /.blogroll -->
-                <div class="social">
-                        <h2>social</h2>
-                        <ul>
-                            <li><a href="https://avallbona.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+							</div>
+						</div>
+					</header>
+				</div>
 
-                            <li><a href="https://github.com/avallbona">github</a></li>
-                            <li><a href="https://twitter.com/avallbona">twitter</a></li>
-                        </ul>
-                </div><!-- /.social -->
-        </section><!-- /#extras -->
+			<!-- Content -->
+				<div id="content-wrapper">
+					<div id="content">
+						<div class="container">
+							<div class="row">
+								<div class="9u 12u(mobile)">
 
-        <footer id="contentinfo" class="body">
-                <address id="about" class="vcard body">
-                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
-                </address><!-- /#about -->
+									<!-- Main Content -->
 
-                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
-        </footer><!-- /#contentinfo -->
+										<section>
+<header>
+    <h2> Blog entries tagged with "formset"</h2>
+</header>
 
-</body>
+
+         <h4 >septiembre 12th, 2015: <a href="/blog/django-extra-views">Django extra views</a> </h4>
+
+										</section>
+
+								</div>
+								<div class="3u 12u(mobile)">
+
+									<!-- Sidebar -->
+                                        <section>
+                                            <header>
+                                                <h2>Recent Articles</h2>
+                                            </header>
+                                            <ul class="link-list">
+
+                                                
+                                                <li><a class = "red" href="/blog/django-extra-views">Django extra views</a><br></li>
+                                                
+                                            </ul>
+                                        </section>                                        <section>
+                                            <header>
+                                                <h2>Social</h2>
+                                            </header>
+                                            <p>
+                                                Vehicula fermentum ligula at pretium. 
+                                            </p>
+                                            <ul class="link-list">
+                                                <li><a class="red" href="https://www.linkedin.com/in/andreu-vallbona-plazas-b0b58720">LinkedIn</a></li>
+                                                <li><a class="red" href="https://twitter.com/avallbona">Twitter</a></li>
+                                            </ul>
+                                        </section>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			<!-- Footer -->
+                <div id="footer-wrapper">
+                    <footer id="footer" class="container">
+                        <div class="row">
+                            <div class="8u 12u(mobile)">
+
+                                <!-- Links -->
+                                    <section>
+                                        <h2>Links to Important Stuff</h2>
+                                        <div>
+                                            <div class="row">
+                                                <div class="3u 12u(mobile)">
+                                                    <ul class="link-list last-child">
+                                                        <li><a href="#">These links</a></li>
+                                                        <li><a href="#">Sed mattis quis rutrum</a></li>
+                                                        <li><a href="#">Accumsan suspendisse</a></li>
+                                                        <li><a href="#">Eu varius vitae magna</a></li>
+                                                    </ul>
+                                                </div>
+                                                <!--<div class="3u 12u(mobile)">-->
+                                                    <!--<ul class="link-list last-child">-->
+                                                        <!--<li><a href="#">Are in the "links.html" include.</a></li>-->
+                                                        <!--<li><a href="#">Sed mattis quis rutrum</a></li>-->
+                                                        <!--<li><a href="#">Accumsan suspendisse</a></li>-->
+                                                        <!--<li><a href="#">Eu varius vitae magna</a></li>-->
+                                                    <!--</ul>-->
+                                                <!--</div>-->
+                                                <!--<div class="3u 12u(mobile)">-->
+                                                    <!--<ul class="link-list last-child">-->
+                                                        <!--<li><a href="#">Neque amet dapibus</a></li>-->
+                                                        <!--<li><a href="#">Accumsan suspendisse</a></li>-->
+                                                        <!--<li><a href="#">Eu varius vitae magna</a></li>-->
+                                                    <!--</ul>-->
+                                                <!--</div>-->
+                                                <!--<div class="3u 12u(mobile)">-->
+                                                    <!--<ul class="link-list last-child">-->
+                                                        <!--<li><a href="#">Neque amet dapibus</a></li>-->
+                                                        <!--<li><a href="#">Sed mattis quis rutrum</a></li>-->
+                                                        <!--<li><a href="#">Accumsan suspendisse</a></li>-->
+                                                        <!--<li><a href="#">Eu varius vitae magna</a></li>-->
+                                                    <!--</ul>-->
+                                                <!--</div>-->
+                                            </div>
+                                        </div>
+                                    </section>
+
+                            </div>                            <div class="4u 12u(mobile)">
+
+                                <!-- Blurb -->
+                                    <section>
+                                        <h2>About Halcyonic For Pelican</h2>
+                                        
+                                            Based on the <a href="https://html5up.net/halcyonic">Halcyonic theme</a> by HTML5 UP, who graciously releases all of their themes under a <a href="https://creativecommons.org/licenses/by/3.0/">Creative Commons license</a>.<br>In short, that means you can do whatever you want with this theme, as long as HTML5 UP is credited.
+
+                                        </p>
+                                    </section>
+
+                            </div>                        </div>
+                    </footer>
+                </div>
+                            <!-- Copyright -->
+                <div id="copyright">
+                     &copy; 2018 | Design: <a href="http://html5up.net">HTML5 UP</a> | Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>
+                </div>
+
+
+		</div>
+
+		<!-- Scripts -->
+            <script src="/theme/js/jquery.min.js"></script>
+            <script src="/theme/js/skel.min.js"></script>
+            <script src="/theme/js/skel-viewport.min.js"></script>
+            <script src="/theme/js/util.js"></script>
+            <!--[if lte IE 8]><script src="/theme/js/ie/respond.min.js"></script><![endif]-->
+            <script src="/theme/js/main.js"></script>
+
+	</body>
 </html>
+

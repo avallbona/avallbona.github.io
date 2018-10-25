@@ -1,0 +1,253 @@
+<!DOCTYPE HTML>
+<!--
+	halcyonic by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Andreu Vallbona - Lookup fields customitzats en Django</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="shortcut icon" href="/theme/img/favicon.ico" rel="icon" type="image/x-icon" />
+		<!--[if lte IE 8]><script src="/theme/js/ie/html5shiv.js"></script><![endif]-->
+		<link rel="stylesheet" href="/theme/css/main.css" />
+		<!--[if lte IE 9]><link rel="stylesheet" href="/theme/css/ie9.css" /><![endif]-->
+  		<meta property="og:locale" content="en">
+		<meta property="og:site_name" content="Andreu Vallbona">
+
+  <meta property="og:type" content="article">
+  <meta property="article:author" content="Pelican">
+  <meta property="og:url" content="https://blog.espontas.com/blog/django-lookup-fields">
+  <meta property="og:title" content="Lookup fields customitzats en Django">
+  <meta property="og:description" content="Short version for index and feeds">
+  <meta property="article:published_time" content="2018-06-03 10:41:00+02:00">
+	</head>
+	<body class="subpage">
+		<div id="page-wrapper">
+
+			<!-- Header -->
+				<div id="header-wrapper">
+					<header id="header" class="container">
+						<div class="row">
+							<div class="12u">
+
+								<!-- Logo -->
+									<h1><a href="/" id="logo">Andreu Vallbona</a></h1>
+
+								<!-- Nav -->
+									<nav id="nav">
+										<a href="/about-me">About me</a>
+										<a href="/tags">Tags</a>
+										<a href="/categories">Categories</a>
+										<a href="/archives">Archives</a>
+									</nav>
+
+							</div>
+						</div>
+					</header>
+				</div>
+
+			<!-- Content -->
+				<div id="content-wrapper">
+					<div id="content">
+						<div class="container">
+							<div class="row">
+								<div class="9u 12u(mobile)">
+
+									<!-- Main Content -->
+
+										<section>
+            <header>
+            <h2>Lookup fields customitzats en Django</h2>
+            <h4>Published on junio 3rd, 2018</h4>
+
+            </header>
+            <p>Django, de manera genèrica, ens proveeix una API del seu ORM a través de la qual ens permet 
+executar els "<a href="https://docs.djangoproject.com/en/1.9/ref/models/querysets/">querysets</a>" 
+que necessitem de manera més o menys optima. Malgrat això, es pot donar el cas que necessitem 
+realitzar algun tipus de consulta una mica més customitzada o millorada. Per a tal efecte, 
+disposem de tota una sèrie d'eines, ja siguin els 
+<a href="https://docs.djangoproject.com/en/1.9/ref/models/querysets/#q-objects">objectes Q</a>, 
+les <a href="https://docs.djangoproject.com/en/1.7/ref/models/queries/#django.db.models.F">expressions F</a>, 
+els <a href="https://docs.djangoproject.com/en/1.9/topics/db/queries/#field-lookups">Field Lookups</a>, etc. 
+Sobre aquest darrer grup, els <strong>Field lookup</strong>'s tenim la possibilitat de definir 
+els nostres propis.</p>
+<p>Per a implementar un "Lookup field" hem d'implementar una classe que ens permeti personalitzar 
+la part esquerra i la part dreta de la clàusula sql. Es fa estenent la classe <code>Lookup</code> 
+del paquet "<code>django.db.models.fields.Lookup</code>" i, posteriorment, registrant aquest classe 
+personalitzada amb el mètode <code>register_lookup</code> de la classe <code>django.db.models.fields.Field</code>. 
+E.g.:</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.db.models</span> <span class="kn">import</span> <span class="n">Lookup</span>
+<span class="kn">from</span> <span class="nn">django.db.models.fields</span> <span class="kn">import</span> <span class="n">Field</span>
+
+
+<span class="k">class</span> <span class="nc">Lower</span><span class="p">(</span><span class="n">Lookup</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Custom lookup for postgres &quot;lower&quot; function implementation</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">lookup_name</span> <span class="o">=</span> <span class="s1">&#39;lower&#39;</span>
+
+    <span class="k">def</span> <span class="nf">as_sql</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">qn</span><span class="p">,</span> <span class="n">connection</span><span class="p">):</span>
+
+        <span class="n">lhs</span><span class="p">,</span> <span class="n">lhs_params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">process_lhs</span><span class="p">(</span><span class="n">qn</span><span class="p">,</span> <span class="n">connection</span><span class="p">)</span>
+        <span class="n">rhs</span><span class="p">,</span> <span class="n">rhs_params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">process_rhs</span><span class="p">(</span><span class="n">qn</span><span class="p">,</span> <span class="n">connection</span><span class="p">)</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="n">lhs_params</span> <span class="o">+</span> <span class="n">rhs_params</span>
+        <span class="k">return</span> <span class="s1">&#39;lower({}) = {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">),</span> <span class="n">params</span>
+
+<span class="n">Field</span><span class="o">.</span><span class="n">register_lookup</span><span class="p">(</span><span class="n">Lower</span><span class="p">)</span>
+</pre></div>
+
+
+<p>L'exemple en concret implementa la funcionalitat de comparar el contingut d'un camp en 
+minúscula amb la cadena que nosaltres li passem. Hi ha varis punts importants:</p>
+<p><code>lookup_name = 'lower'</code>
+Defineix el nom que emprarem per executar la clàusula.</p>
+<p><code>lhs, lhs_params = self.process_lhs(qn, connection)</code>
+Compila la part esquerra de la clàusula</p>
+<p><code>rhs, rhs_params = self.process_rhs(qn, connection)</code>
+Compila la part dreta de la clàusula</p>
+<p><code>Field.register_lookup(Lower)</code>
+Registrem el custom lookup per tal de poder-lo emprar.</p>
+<p>Finalment, un exemple d'ús del nostre custom lookup seria:</p>
+<div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
+    <span class="n">task</span> <span class="o">=</span> <span class="n">TransTask</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">object_class__lower</span><span class="o">=</span><span class="n">class_name</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+<span class="k">except</span> <span class="n">TransTask</span><span class="o">.</span><span class="n">DoesNotExist</span><span class="p">:</span>
+    <span class="n">task</span> <span class="o">=</span> <span class="bp">None</span>
+</pre></div>
+
+
+<p><code>object_class__lower=class_name</code>
+és la part on s'aplica el "custom lookup". Compararà el contingut en minúscula del camp 
+<code>object_class</code> amb el contingut de la variable <code>class_name</code>.</p>
+            <hr>
+              <!-- Pagination -->
+            <div class="pagination">
+              <a class="pagination" href="https://blog.espontas.com/blog/django-concurrency">
+             &larr; Afegir concurrència a comandes de Django ]
+         </a>
+              <a class="pagination" href="https://blog.espontas.com/blog/chained-html-selects" >[ Encadenar select's Html amb Django de manera fàcil i poc intrussiva &rarr;</a>
+            </div>
+										</section>
+
+								</div>
+								<div class="3u 12u(mobile)">
+
+									<!-- Sidebar -->
+                                        <section>
+                                            <header>
+                                                <h2>Recent Articles</h2>
+                                            </header>
+                                            <ul class="link-list">
+
+                                                
+                                                <li><a class = "red" href="/blog/chained-html-selects">Encadenar select's Html amb Django de manera fàcil i poc intrussiva</a><br></li>
+
+                                                
+                                                <li><a class = "red" href="/blog/django-lookup-fields">Lookup fields customitzats en Django</a><br></li>
+
+                                                
+                                                <li><a class = "red" href="/blog/django-concurrency">Afegir concurrència a comandes de Django</a><br></li>
+
+                                                
+                                                <li><a class = "red" href="/blog/429">Frasses</a><br></li>
+                                                
+                                            </ul>
+                                        </section>                                        <section>
+                                            <header>
+                                                <h2>Social</h2>
+                                            </header>
+                                            <p>
+                                                Vehicula fermentum ligula at pretium. 
+                                            </p>
+                                            <ul class="link-list">
+                                                <li><a class="red" href="https://www.linkedin.com/in/andreu-vallbona-plazas-b0b58720">LinkedIn</a></li>
+                                                <li><a class="red" href="https://twitter.com/avallbona">Twitter</a></li>
+                                            </ul>
+                                        </section>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			<!-- Footer -->
+                <div id="footer-wrapper">
+                    <footer id="footer" class="container">
+                        <div class="row">
+                            <div class="8u 12u(mobile)">
+
+                                <!-- Links -->
+                                    <section>
+                                        <h2>Links to Important Stuff</h2>
+                                        <div>
+                                            <div class="row">
+                                                <div class="3u 12u(mobile)">
+                                                    <ul class="link-list last-child">
+                                                        <li><a href="#">These links</a></li>
+                                                        <li><a href="#">Sed mattis quis rutrum</a></li>
+                                                        <li><a href="#">Accumsan suspendisse</a></li>
+                                                        <li><a href="#">Eu varius vitae magna</a></li>
+                                                    </ul>
+                                                </div>
+                                                <!--<div class="3u 12u(mobile)">-->
+                                                    <!--<ul class="link-list last-child">-->
+                                                        <!--<li><a href="#">Are in the "links.html" include.</a></li>-->
+                                                        <!--<li><a href="#">Sed mattis quis rutrum</a></li>-->
+                                                        <!--<li><a href="#">Accumsan suspendisse</a></li>-->
+                                                        <!--<li><a href="#">Eu varius vitae magna</a></li>-->
+                                                    <!--</ul>-->
+                                                <!--</div>-->
+                                                <!--<div class="3u 12u(mobile)">-->
+                                                    <!--<ul class="link-list last-child">-->
+                                                        <!--<li><a href="#">Neque amet dapibus</a></li>-->
+                                                        <!--<li><a href="#">Accumsan suspendisse</a></li>-->
+                                                        <!--<li><a href="#">Eu varius vitae magna</a></li>-->
+                                                    <!--</ul>-->
+                                                <!--</div>-->
+                                                <!--<div class="3u 12u(mobile)">-->
+                                                    <!--<ul class="link-list last-child">-->
+                                                        <!--<li><a href="#">Neque amet dapibus</a></li>-->
+                                                        <!--<li><a href="#">Sed mattis quis rutrum</a></li>-->
+                                                        <!--<li><a href="#">Accumsan suspendisse</a></li>-->
+                                                        <!--<li><a href="#">Eu varius vitae magna</a></li>-->
+                                                    <!--</ul>-->
+                                                <!--</div>-->
+                                            </div>
+                                        </div>
+                                    </section>
+
+                            </div>                            <div class="4u 12u(mobile)">
+
+                                <!-- Blurb -->
+                                    <section>
+                                        <h2>About Halcyonic For Pelican</h2>
+                                        
+                                            Based on the <a href="https://html5up.net/halcyonic">Halcyonic theme</a> by HTML5 UP, who graciously releases all of their themes under a <a href="https://creativecommons.org/licenses/by/3.0/">Creative Commons license</a>.<br>In short, that means you can do whatever you want with this theme, as long as HTML5 UP is credited.
+
+                                        </p>
+                                    </section>
+
+                            </div>                        </div>
+                    </footer>
+                </div>
+                            <!-- Copyright -->
+                <div id="copyright">
+                     &copy; 2018 | Design: <a href="http://html5up.net">HTML5 UP</a> | Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>
+                </div>
+
+
+		</div>
+
+		<!-- Scripts -->
+            <script src="/theme/js/jquery.min.js"></script>
+            <script src="/theme/js/skel.min.js"></script>
+            <script src="/theme/js/skel-viewport.min.js"></script>
+            <script src="/theme/js/util.js"></script>
+            <!--[if lte IE 8]><script src="/theme/js/ie/respond.min.js"></script><![endif]-->
+            <script src="/theme/js/main.js"></script>
+
+	</body>
+</html>
+

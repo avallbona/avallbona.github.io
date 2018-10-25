@@ -1,0 +1,253 @@
+<!DOCTYPE HTML>
+<!--
+	halcyonic by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Andreu Vallbona - Detecció idioma per subdomini en Django</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="shortcut icon" href="/theme/img/favicon.ico" rel="icon" type="image/x-icon" />
+		<!--[if lte IE 8]><script src="/theme/js/ie/html5shiv.js"></script><![endif]-->
+		<link rel="stylesheet" href="/theme/css/main.css" />
+		<!--[if lte IE 9]><link rel="stylesheet" href="/theme/css/ie9.css" /><![endif]-->
+  		<meta property="og:locale" content="en">
+		<meta property="og:site_name" content="Andreu Vallbona">
+
+  <meta property="og:type" content="article">
+  <meta property="article:author" content="Pelican">
+  <meta property="og:url" content="https://blog.espontas.com/blog/deteccio-idioma-per-subdomini-en-django">
+  <meta property="og:title" content="Detecció idioma per subdomini en Django">
+  <meta property="og:description" content="Django ens proporciona eines per detectar i fixar l'idioma de la nostra aplicació. Normalment es...">
+  <meta property="article:published_time" content="2015-12-30 11:20:00+01:00">
+	</head>
+	<body class="subpage">
+		<div id="page-wrapper">
+
+			<!-- Header -->
+				<div id="header-wrapper">
+					<header id="header" class="container">
+						<div class="row">
+							<div class="12u">
+
+								<!-- Logo -->
+									<h1><a href="/" id="logo">Andreu Vallbona</a></h1>
+
+								<!-- Nav -->
+									<nav id="nav">
+										<a href="/about-me">About me</a>
+										<a href="/tags">Tags</a>
+										<a href="/categories">Categories</a>
+										<a href="/archives">Archives</a>
+									</nav>
+
+							</div>
+						</div>
+					</header>
+				</div>
+
+			<!-- Content -->
+				<div id="content-wrapper">
+					<div id="content">
+						<div class="container">
+							<div class="row">
+								<div class="9u 12u(mobile)">
+
+									<!-- Main Content -->
+
+										<section>
+            <header>
+            <h2>Detecció idioma per subdomini en Django</h2>
+            <h4>Published on diciembre 30th, 2015</h4>
+
+            </header>
+            <p>Django ens proporciona eines per detectar i fixar l'idioma de la nostra
+aplicació. Normalment es fa servir
+<strong><a href="https://docs.djangoproject.com/en/1.9/topics/i18n/translation/">i18n_patterns</a></strong>
+a través del qual s'encapsulen les urls amb el mateix per tal que ens
+fixi a l'inici del path de la url el codi d'idioma. Amb el middleware
+que explicarem no cal fer servir l'<strong>i18n_patterns</strong> ja que serà el
+pròpi "middleware" que detectarà i fixarà l'idioma de l'aplicació.
+<!--more--></p>
+<p>Primer de tot crearem l'arxiu que contindrà el "middleware":</p>
+<p>[sourcecode language="python"]</p>
+<p># -*- encoding: utf-8 -*-</p>
+<p>from django.utils import translation<br>
+from django.conf import settings</p>
+<p>class SubdomainLanguageMiddleware(object):<br>
+"""<br>
+Set the language for the site based on the subdomain the request<br>
+is being served on. For example, serving on 'fr.domain.com' would<br>
+make the language French (fr).<br>
+"""<br>
+language_codes = [it[0] for it in settings.LANGUAGES]</p>
+<p>def process_request(self, request):<br>
+try:<br>
+lang = request.get_host().split('.')[0]<br>
+except IndexError:<br>
+lang = self.language_codes[0]<br>
+if lang == 'www':<br>
+lang = self.language_codes[0]<br>
+if lang and lang in self.language_codes:<br>
+translation.activate(lang)<br>
+request.LANGUAGE_CODE = lang</p>
+<p>[/sourcecode]</p>
+<p>Fixem-nos en el cas que no s'ens indica cap codi d'idioma i ens ve
+"www", que fixem el primer idioma per defecte definit als "settings.py".</p>
+<p>Llavors, als "settings.py" hem de tenir configurats els idiomes amb els
+quals volem fer feina:</p>
+<p>[sourcecode language="python"]<br>
+LANGUAGES = (<br>
+('ca', 'Català'),<br>
+('es', 'Español'),<br>
+('de', 'Deutsch'),<br>
+('en', 'English'),<br>
+)<br>
+[/sourcecode]</p>
+<p>i, com a darrer pas, li hem d'indicar als "settings.py" que ens agafi el
+"middleware" que acabem de crear:</p>
+<p>[sourcecode language="python"]<br>
+MIDDLEWARE_CLASSES = (<br>
+...,<br>
+'myproject.language_middleware.SubdomainLanguageMiddleware',<br>
+)<br>
+[/sourcecode]</p>
+<p>Llavors ja podrem accedir a la web fixant l'idioma en el subdomini:</p>
+<p>[sourcecode language="html"]<br>
+http://www.lamevaweb.com<br>
+http://es.lamevaweb.com<br>
+http://de.lamevaweb.com<br>
+http://en.lamevaweb.com<br>
+[/sourcecode]</p>
+            <hr>
+              <!-- Pagination -->
+            <div class="pagination">
+              <a class="pagination" href="https://blog.espontas.com/blog/customitzacio-de-backend-dautenticacio-amb-django">
+             &larr; Customització de backend d'autenticació amb Django ]
+         </a>
+              <a class="pagination" href="https://blog.espontas.com/blog/429" >[ Frasses &rarr;</a>
+            </div>
+										</section>
+
+								</div>
+								<div class="3u 12u(mobile)">
+
+									<!-- Sidebar -->
+                                        <section>
+                                            <header>
+                                                <h2>Recent Articles</h2>
+                                            </header>
+                                            <ul class="link-list">
+
+                                                
+                                                <li><a class = "red" href="/blog/chained-html-selects">Encadenar select's Html amb Django de manera fàcil i poc intrussiva</a><br></li>
+
+                                                
+                                                <li><a class = "red" href="/blog/django-lookup-fields">Lookup fields customitzats en Django</a><br></li>
+
+                                                
+                                                <li><a class = "red" href="/blog/django-concurrency">Afegir concurrència a comandes de Django</a><br></li>
+
+                                                
+                                                <li><a class = "red" href="/blog/429">Frasses</a><br></li>
+                                                
+                                            </ul>
+                                        </section>                                        <section>
+                                            <header>
+                                                <h2>Social</h2>
+                                            </header>
+                                            <p>
+                                                Vehicula fermentum ligula at pretium. 
+                                            </p>
+                                            <ul class="link-list">
+                                                <li><a class="red" href="https://www.linkedin.com/in/andreu-vallbona-plazas-b0b58720">LinkedIn</a></li>
+                                                <li><a class="red" href="https://twitter.com/avallbona">Twitter</a></li>
+                                            </ul>
+                                        </section>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			<!-- Footer -->
+                <div id="footer-wrapper">
+                    <footer id="footer" class="container">
+                        <div class="row">
+                            <div class="8u 12u(mobile)">
+
+                                <!-- Links -->
+                                    <section>
+                                        <h2>Links to Important Stuff</h2>
+                                        <div>
+                                            <div class="row">
+                                                <div class="3u 12u(mobile)">
+                                                    <ul class="link-list last-child">
+                                                        <li><a href="#">These links</a></li>
+                                                        <li><a href="#">Sed mattis quis rutrum</a></li>
+                                                        <li><a href="#">Accumsan suspendisse</a></li>
+                                                        <li><a href="#">Eu varius vitae magna</a></li>
+                                                    </ul>
+                                                </div>
+                                                <!--<div class="3u 12u(mobile)">-->
+                                                    <!--<ul class="link-list last-child">-->
+                                                        <!--<li><a href="#">Are in the "links.html" include.</a></li>-->
+                                                        <!--<li><a href="#">Sed mattis quis rutrum</a></li>-->
+                                                        <!--<li><a href="#">Accumsan suspendisse</a></li>-->
+                                                        <!--<li><a href="#">Eu varius vitae magna</a></li>-->
+                                                    <!--</ul>-->
+                                                <!--</div>-->
+                                                <!--<div class="3u 12u(mobile)">-->
+                                                    <!--<ul class="link-list last-child">-->
+                                                        <!--<li><a href="#">Neque amet dapibus</a></li>-->
+                                                        <!--<li><a href="#">Accumsan suspendisse</a></li>-->
+                                                        <!--<li><a href="#">Eu varius vitae magna</a></li>-->
+                                                    <!--</ul>-->
+                                                <!--</div>-->
+                                                <!--<div class="3u 12u(mobile)">-->
+                                                    <!--<ul class="link-list last-child">-->
+                                                        <!--<li><a href="#">Neque amet dapibus</a></li>-->
+                                                        <!--<li><a href="#">Sed mattis quis rutrum</a></li>-->
+                                                        <!--<li><a href="#">Accumsan suspendisse</a></li>-->
+                                                        <!--<li><a href="#">Eu varius vitae magna</a></li>-->
+                                                    <!--</ul>-->
+                                                <!--</div>-->
+                                            </div>
+                                        </div>
+                                    </section>
+
+                            </div>                            <div class="4u 12u(mobile)">
+
+                                <!-- Blurb -->
+                                    <section>
+                                        <h2>About Halcyonic For Pelican</h2>
+                                        
+                                            Based on the <a href="https://html5up.net/halcyonic">Halcyonic theme</a> by HTML5 UP, who graciously releases all of their themes under a <a href="https://creativecommons.org/licenses/by/3.0/">Creative Commons license</a>.<br>In short, that means you can do whatever you want with this theme, as long as HTML5 UP is credited.
+
+                                        </p>
+                                    </section>
+
+                            </div>                        </div>
+                    </footer>
+                </div>
+                            <!-- Copyright -->
+                <div id="copyright">
+                     &copy; 2018 | Design: <a href="http://html5up.net">HTML5 UP</a> | Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>
+                </div>
+
+
+		</div>
+
+		<!-- Scripts -->
+            <script src="/theme/js/jquery.min.js"></script>
+            <script src="/theme/js/skel.min.js"></script>
+            <script src="/theme/js/skel-viewport.min.js"></script>
+            <script src="/theme/js/util.js"></script>
+            <!--[if lte IE 8]><script src="/theme/js/ie/respond.min.js"></script><![endif]-->
+            <script src="/theme/js/main.js"></script>
+
+	</body>
+</html>
+
