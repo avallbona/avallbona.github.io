@@ -13,6 +13,10 @@
 		<!--[if lte IE 8]><script src="/theme/js/ie/html5shiv.js"></script><![endif]-->
 		<link rel="stylesheet" href="/theme/css/main.css" />
 		<!--[if lte IE 9]><link rel="stylesheet" href="/theme/css/ie9.css" /><![endif]-->
+
+        <!--<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/default.min.css">-->
+        <link rel="stylesheet" href="https://highlightjs.org/static/demo/styles/androidstudio.css">
+
   		<meta property="og:locale" content="en">
 		<meta property="og:site_name" content="Andreu Vallbona">
 
@@ -179,6 +183,16 @@ explicació</a> a <strong>Stack Overflow</strong></p>
             <script src="/theme/js/util.js"></script>
             <!--[if lte IE 8]><script src="/theme/js/ie/respond.min.js"></script><![endif]-->
             <script src="/theme/js/main.js"></script>
+
+            <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
+            <script type="text/javascript">
+                $(document).ready(function() {
+                  $('div.highlight').each(function(i, block) {
+                    hljs.highlightBlock(block);
+                  });
+                });
+            </script>
+
 
 	</body>
 </html>

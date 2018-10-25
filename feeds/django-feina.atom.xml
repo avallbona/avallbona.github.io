@@ -10,58 +10,62 @@ aplicació. Normalment es fa servir
 a través del qual s'encapsulen les urls amb el mateix per tal que ens
 fixi a l'inici del path de la url el codi d'idioma. Amb el middleware
 que explicarem no cal fer servir l'&lt;strong&gt;i18n_patterns&lt;/strong&gt; ja que serà el
-pròpi "middleware" que detectarà i fixarà l'idioma de l'aplicació.
-&lt;!--more--&gt;&lt;/p&gt;
+pròpi "middleware" que detectarà i fixarà l'idioma de l'aplicació.&lt;/p&gt;
 &lt;p&gt;Primer de tot crearem l'arxiu que contindrà el "middleware":&lt;/p&gt;
-&lt;p&gt;[sourcecode language="python"]&lt;/p&gt;
-&lt;p&gt;# -*- encoding: utf-8 -*-&lt;/p&gt;
-&lt;p&gt;from django.utils import translation&lt;br&gt;
-from django.conf import settings&lt;/p&gt;
-&lt;p&gt;class SubdomainLanguageMiddleware(object):&lt;br&gt;
-"""&lt;br&gt;
-Set the language for the site based on the subdomain the request&lt;br&gt;
-is being served on. For example, serving on 'fr.domain.com' would&lt;br&gt;
-make the language French (fr).&lt;br&gt;
-"""&lt;br&gt;
-language_codes = [it[0] for it in settings.LANGUAGES]&lt;/p&gt;
-&lt;p&gt;def process_request(self, request):&lt;br&gt;
-try:&lt;br&gt;
-lang = request.get_host().split('.')[0]&lt;br&gt;
-except IndexError:&lt;br&gt;
-lang = self.language_codes[0]&lt;br&gt;
-if lang == 'www':&lt;br&gt;
-lang = self.language_codes[0]&lt;br&gt;
-if lang and lang in self.language_codes:&lt;br&gt;
-translation.activate(lang)&lt;br&gt;
-request.LANGUAGE_CODE = lang&lt;/p&gt;
-&lt;p&gt;[/sourcecode]&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;# -*- encoding: utf-8 -*-&lt;/span&gt;
+
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;django.utils&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;translation&lt;/span&gt;  
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;django.conf&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;settings&lt;/span&gt;
+
+&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;SubdomainLanguageMiddleware&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;object&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;  
+    &lt;span class="sd"&gt;&amp;quot;&amp;quot;&amp;quot;  &lt;/span&gt;
+&lt;span class="sd"&gt;    Set the language for the site based on the subdomain the request  &lt;/span&gt;
+&lt;span class="sd"&gt;    is being served on. For example, serving on &amp;#39;fr.domain.com&amp;#39; would  &lt;/span&gt;
+&lt;span class="sd"&gt;    make the language French (fr).  &lt;/span&gt;
+&lt;span class="sd"&gt;    &amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;  
+    &lt;span class="n"&gt;language_codes&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;it&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;it&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;settings&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;LANGUAGES&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;process_request&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;request&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;  
+        &lt;span class="k"&gt;try&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;  
+            &lt;span class="n"&gt;lang&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;request&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;get_host&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;split&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;.&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;  
+        &lt;span class="k"&gt;except&lt;/span&gt; &lt;span class="ne"&gt;IndexError&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;  
+            &lt;span class="n"&gt;lang&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;language_codes&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;  
+        &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;lang&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;www&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;  
+            &lt;span class="n"&gt;lang&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;language_codes&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;  
+        &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;lang&lt;/span&gt; &lt;span class="ow"&gt;and&lt;/span&gt; &lt;span class="n"&gt;lang&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;language_codes&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;  
+            &lt;span class="n"&gt;translation&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;activate&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;lang&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;  
+            &lt;span class="n"&gt;request&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;LANGUAGE_CODE&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;lang&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
 &lt;p&gt;Fixem-nos en el cas que no s'ens indica cap codi d'idioma i ens ve
 "www", que fixem el primer idioma per defecte definit als "settings.py".&lt;/p&gt;
 &lt;p&gt;Llavors, als "settings.py" hem de tenir configurats els idiomes amb els
 quals volem fer feina:&lt;/p&gt;
-&lt;p&gt;[sourcecode language="python"]&lt;br&gt;
-LANGUAGES = (&lt;br&gt;
-('ca', 'Català'),&lt;br&gt;
-('es', 'Español'),&lt;br&gt;
-('de', 'Deutsch'),&lt;br&gt;
-('en', 'English'),&lt;br&gt;
-)&lt;br&gt;
-[/sourcecode]&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;LANGUAGES = (  
+    (&amp;#39;ca&amp;#39;, &amp;#39;Català&amp;#39;),  
+    (&amp;#39;es&amp;#39;, &amp;#39;Español&amp;#39;),  
+    (&amp;#39;de&amp;#39;, &amp;#39;Deutsch&amp;#39;),  
+    (&amp;#39;en&amp;#39;, &amp;#39;English&amp;#39;),  
+)
+&lt;/pre&gt;&lt;/div&gt;
+
+
 &lt;p&gt;i, com a darrer pas, li hem d'indicar als "settings.py" que ens agafi el
 "middleware" que acabem de crear:&lt;/p&gt;
-&lt;p&gt;[sourcecode language="python"]&lt;br&gt;
-MIDDLEWARE_CLASSES = (&lt;br&gt;
-...,&lt;br&gt;
-'myproject.language_middleware.SubdomainLanguageMiddleware',&lt;br&gt;
-)&lt;br&gt;
-[/sourcecode]&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;MIDDLEWARE_CLASSES = (  
+    ...,  
+    &amp;#39;myproject.language_middleware.SubdomainLanguageMiddleware&amp;#39;,  
+)
+&lt;/pre&gt;&lt;/div&gt;
+
+
 &lt;p&gt;Llavors ja podrem accedir a la web fixant l'idioma en el subdomini:&lt;/p&gt;
-&lt;p&gt;[sourcecode language="html"]&lt;br&gt;
-http://www.lamevaweb.com&lt;br&gt;
-http://es.lamevaweb.com&lt;br&gt;
-http://de.lamevaweb.com&lt;br&gt;
-http://en.lamevaweb.com&lt;br&gt;
-[/sourcecode]&lt;/p&gt;</content></entry><entry><title>Customització de backend d'autenticació amb Django</title><link href="https://blog.espontas.com/blog/customitzacio-de-backend-dautenticacio-amb-django" rel="alternate"></link><published>2015-12-30T10:11:00+01:00</published><updated>2015-12-30T10:11:00+01:00</updated><author><name>blogadmin</name></author><id>tag:blog.espontas.com,2015-12-30:/blog/customitzacio-de-backend-dautenticacio-amb-django</id><summary type="html">&lt;p&gt;Per defecte Django empra el backend d'autenticació "ModelBackend"&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;http://www.lamevaweb.com  
+http://es.lamevaweb.com  
+http://de.lamevaweb.com  
+http://en.lamevaweb.com
+&lt;/pre&gt;&lt;/div&gt;</content></entry><entry><title>Customització de backend d'autenticació amb Django</title><link href="https://blog.espontas.com/blog/customitzacio-de-backend-dautenticacio-amb-django" rel="alternate"></link><published>2015-12-30T10:11:00+01:00</published><updated>2015-12-30T10:11:00+01:00</updated><author><name>blogadmin</name></author><id>tag:blog.espontas.com,2015-12-30:/blog/customitzacio-de-backend-dautenticacio-amb-django</id><summary type="html">&lt;p&gt;Per defecte Django empra el backend d'autenticació "ModelBackend"&lt;/p&gt;
 &lt;p&gt;[sourcecode language="python"]&lt;br&gt;
 AUTHENTICATION_BACKENDS = (&lt;br&gt;
 'django.contrib.auth.backends.ModelBackend',&lt;br&gt;

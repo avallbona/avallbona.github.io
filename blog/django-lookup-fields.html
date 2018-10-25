@@ -13,6 +13,10 @@
 		<!--[if lte IE 8]><script src="/theme/js/ie/html5shiv.js"></script><![endif]-->
 		<link rel="stylesheet" href="/theme/css/main.css" />
 		<!--[if lte IE 9]><link rel="stylesheet" href="/theme/css/ie9.css" /><![endif]-->
+
+        <!--<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/default.min.css">-->
+        <link rel="stylesheet" href="https://highlightjs.org/static/demo/styles/androidstudio.css">
+
   		<meta property="og:locale" content="en">
 		<meta property="og:site_name" content="Andreu Vallbona">
 
@@ -86,11 +90,9 @@ E.g.:</p>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Custom lookup for postgres &quot;lower&quot; function implementation</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
     <span class="n">lookup_name</span> <span class="o">=</span> <span class="s1">&#39;lower&#39;</span>
 
     <span class="k">def</span> <span class="nf">as_sql</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">qn</span><span class="p">,</span> <span class="n">connection</span><span class="p">):</span>
-
         <span class="n">lhs</span><span class="p">,</span> <span class="n">lhs_params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">process_lhs</span><span class="p">(</span><span class="n">qn</span><span class="p">,</span> <span class="n">connection</span><span class="p">)</span>
         <span class="n">rhs</span><span class="p">,</span> <span class="n">rhs_params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">process_rhs</span><span class="p">(</span><span class="n">qn</span><span class="p">,</span> <span class="n">connection</span><span class="p">)</span>
         <span class="n">params</span> <span class="o">=</span> <span class="n">lhs_params</span> <span class="o">+</span> <span class="n">rhs_params</span>
@@ -102,25 +104,45 @@ E.g.:</p>
 
 <p>L'exemple en concret implementa la funcionalitat de comparar el contingut d'un camp en 
 minúscula amb la cadena que nosaltres li passem. Hi ha varis punts importants:</p>
-<p><code>lookup_name = 'lower'</code>
-Defineix el nom que emprarem per executar la clàusula.</p>
-<p><code>lhs, lhs_params = self.process_lhs(qn, connection)</code>
-Compila la part esquerra de la clàusula</p>
-<p><code>rhs, rhs_params = self.process_rhs(qn, connection)</code>
-Compila la part dreta de la clàusula</p>
-<p><code>Field.register_lookup(Lower)</code>
-Registrem el custom lookup per tal de poder-lo emprar.</p>
-<p>Finalment, un exemple d'ús del nostre custom lookup seria:</p>
-<div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
-    <span class="n">task</span> <span class="o">=</span> <span class="n">TransTask</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">object_class__lower</span><span class="o">=</span><span class="n">class_name</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
-<span class="k">except</span> <span class="n">TransTask</span><span class="o">.</span><span class="n">DoesNotExist</span><span class="p">:</span>
-    <span class="n">task</span> <span class="o">=</span> <span class="bp">None</span>
+<div class="highlight"><pre><span></span>lookup_name = &#39;lower&#39;
 </pre></div>
 
 
-<p><code>object_class__lower=class_name</code>
-és la part on s'aplica el "custom lookup". Compararà el contingut en minúscula del camp 
-<code>object_class</code> amb el contingut de la variable <code>class_name</code>.</p>
+<p>Defineix el nom que emprarem per executar la clàusula.</p>
+<div class="highlight"><pre><span></span>lhs, lhs_params = self.process_lhs(qn, connection)
+</pre></div>
+
+
+<p>Compila la part esquerra de la clàusula</p>
+<div class="highlight"><pre><span></span>rhs, rhs_params = self.process_rhs(qn, connection)
+</pre></div>
+
+
+<p>Compila la part dreta de la clàusula</p>
+<div class="highlight"><pre><span></span>Field.register_lookup(Lower)
+</pre></div>
+
+
+<p>Registrem el custom lookup per tal de poder-lo emprar.</p>
+<p>Finalment, un exemple d'ús del nostre custom lookup seria:</p>
+<div class="highlight"><pre><span></span><span class="k">try</span><span class="o">:</span>
+    <span class="n">task</span> <span class="o">=</span> <span class="n">TransTask</span><span class="o">.</span><span class="na">objects</span><span class="o">.</span><span class="na">filter</span><span class="o">(</span><span class="n">object_class__lower</span><span class="o">=</span><span class="n">class_name</span><span class="o">).</span><span class="kd">get</span><span class="o">()</span>
+<span class="n">except</span> <span class="n">TransTask</span><span class="o">.</span><span class="na">DoesNotExist</span><span class="o">:</span>
+    <span class="n">task</span> <span class="o">=</span> <span class="n">None</span>
+</pre></div>
+
+
+<p>&nbsp;</p>
+<div class="highlight"><pre><span></span>object_class__lower=class_name
+</pre></div>
+
+
+<p>és la part on s'aplica el "custom lookup". Compararà el contingut en minúscula del camp </p>
+<div class="highlight"><pre><span></span>object_class
+</pre></div>
+
+
+<p>amb el contingut de la variable <code>class_name</code>.</p>
             <hr>
               <!-- Pagination -->
             <div class="pagination">
@@ -189,6 +211,16 @@ Registrem el custom lookup per tal de poder-lo emprar.</p>
             <script src="/theme/js/util.js"></script>
             <!--[if lte IE 8]><script src="/theme/js/ie/respond.min.js"></script><![endif]-->
             <script src="/theme/js/main.js"></script>
+
+            <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
+            <script type="text/javascript">
+                $(document).ready(function() {
+                  $('div.highlight').each(function(i, block) {
+                    hljs.highlightBlock(block);
+                  });
+                });
+            </script>
+
 
 	</body>
 </html>

@@ -13,6 +13,10 @@
 		<!--[if lte IE 8]><script src="/theme/js/ie/html5shiv.js"></script><![endif]-->
 		<link rel="stylesheet" href="/theme/css/main.css" />
 		<!--[if lte IE 9]><link rel="stylesheet" href="/theme/css/ie9.css" /><![endif]-->
+
+        <!--<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/default.min.css">-->
+        <link rel="stylesheet" href="https://highlightjs.org/static/demo/styles/androidstudio.css">
+
 		<meta property="og:locale" content="en">
 		<meta property="og:site_name" content="Andreu Vallbona">
 	</head>
@@ -55,9 +59,23 @@
             <h2>About me</h2>
             
             </header>
-            <p>Bachelor's degree in Computer System (IT Engineer) by the Open University of Catalonia (UOC), Spain.</p>
-<p>In terms of professional experience, I worked from June 1995 to March 2001 as a programmer in Corsoft, a company dedicated to the management software. From April 2001 to June 2003 I worked as an analyst-programmer at RG Global Communications, a company dedicated to the world of advertising, graphic design and internet. From June 2003 until November 2011 working as an analyst-programmer at AT4. From December 2011 until August 2013 worked as head developing team, analyst-programmer and project manager in Mola.com. From November 2013 to March 2014 worked as web developer in First Mallorca. From April 2014 to January 2015 worked as developer in OmniAcces. Since February 2015 I work as software engineer at Apsl.net.</p>
-<p>Throughout my career I gained strong knowledge of HTML5, CSS3, Xhtml 1.x, CSS 2.x, Python and Django, Docker, Javascript, ASP, PHP (versions 4 and 5), Zend Framework 1.x, Redis, Memcache, JQuery, MySQL, PostgreSQL, PLSQL, Flash, AJAX, UML, MVC, XML, webservices, W3C web standards, WAI, OOP, database modeling with CASE tools, Git and Subversion. As well as software life cycle including requirements, analysis and design, implementation, deployment, CI, maintenance, refactoring, TDD and documentation.</p>
+            <p>Bachelor's degree in Computer System (IT Engineer) by the 
+Open University of Catalonia (UOC), Spain.</p>
+<p>In terms of professional experience, I worked from June 1995 to March 2001 as a 
+programmer in Corsoft, a company dedicated to the management software. 
+From April 2001 to June 2003 I worked as an analyst-programmer at RG Global Communications, 
+a company dedicated to the world of advertising, graphic design and internet. 
+From June 2003 until November 2011 working as an analyst-programmer at AT4. 
+From December 2011 until August 2013 worked as head developing team, analyst-programmer 
+and project manager in Mola.com. From November 2013 to March 2014 worked as web developer 
+in First Mallorca. From April 2014 to January 2015 worked as developer in OmniAcces. 
+Since February 2015 I work as software engineer at Apsl.net.</p>
+<p>Throughout my career I gained strong knowledge of <strong>HTML5</strong>, <strong>CSS3</strong>, Xhtml 1.x, CSS 2.x, 
+<strong>Python</strong> and <strong>Django</strong>, <strong>Docker</strong>, <strong>Javascript</strong>, ASP, PHP (versions 4 and 5), Zend Framework 1.x, 
+Redis, Memcache, JQuery, MySQL, PostgreSQL, PLSQL, Flash, AJAX, UML, MVC, XML, webservices, 
+W3C web standards, WAI, OOP, database modeling with CASE tools, <strong>Git</strong> and Subversion. 
+As well as software life cycle including requirements, analysis and design, implementation, 
+deployment, CI, maintenance, refactoring, TDD and documentation.</p>
 										</section>
 
 								</div>
@@ -118,6 +136,16 @@
             <script src="/theme/js/util.js"></script>
             <!--[if lte IE 8]><script src="/theme/js/ie/respond.min.js"></script><![endif]-->
             <script src="/theme/js/main.js"></script>
+
+            <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
+            <script type="text/javascript">
+                $(document).ready(function() {
+                  $('div.highlight').each(function(i, block) {
+                    hljs.highlightBlock(block);
+                  });
+                });
+            </script>
+
 
 	</body>
 </html>
