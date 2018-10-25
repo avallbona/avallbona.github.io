@@ -24,7 +24,7 @@
   <meta property="article:author" content="Pelican">
   <meta property="og:url" content="https://blog.espontas.com/blog/customitzacio-de-backend-dautenticacio-amb-django">
   <meta property="og:title" content="Customització de backend d'autenticació amb Django">
-  <meta property="og:description" content="Per defecte Django empra el backend d'autenticació "ModelBackend" [sourcecode language="python"]...">
+  <meta property="og:description" content="Per defecte Django empra el backend d'autenticació "ModelBackend" AUTHENTICATION\_BACKENDS = (...">
   <meta property="article:published_time" content="2015-12-30 10:11:00+01:00">
 	</head>
 	<body class="subpage">
@@ -68,40 +68,44 @@
 
             </header>
             <p>Per defecte Django empra el backend d'autenticació "ModelBackend"</p>
-<p>[sourcecode language="python"]<br>
-AUTHENTICATION_BACKENDS = (<br>
-'django.contrib.auth.backends.ModelBackend',<br>
-)<br>
-[/sourcecode]</p>
+<div class="highlight"><pre><span></span>AUTHENTICATION\_BACKENDS = (  
+    &#39;django.contrib.auth.backends.ModelBackend&#39;,  
+)
+</pre></div>
+
+
 <p>Aquest "backend" intenta autenticara partir del nom d'usuari i la
 contrasenya que reb. Nogensmenys es pot donar el cas que vulguem
 autenticar a partir de l'email de l'usuari.<!--more--></p>
 <p>Per aquest cas ho podem fer estenent la classe "ModelBackend" i
 reimplementant el mètode autenticate:</p>
-<p>[sourcecode language="python"]<br>
-class MyCustomEmailAuthBackend(ModelBackend):<br>
-"""<br>
-Allow users to log in with their email address<br>
-"""</p>
-<p>def authenticate(self, email=None, password=None, **kwargs):</p>
-<p>if email is None or password is None:<br>
-return None</p>
-<p>try:<br>
-user = User.objects.get(email=email)<br>
-if user.check_password(password):<br>
-return user<br>
-except User.DoesNotExist:<br>
-return None<br>
-[/sourcecode]</p>
+<div class="highlight"><pre><span></span><span class="kr">class</span> <span class="nx">MyCustomEmailAuthBackend</span><span class="p">(</span><span class="nx">ModelBackend</span><span class="p">)</span><span class="o">:</span>  
+    <span class="s2">&quot;&quot;&quot;  </span>
+<span class="s2">    Allow users to log in with their email address  </span>
+<span class="s2">    &quot;&quot;&quot;</span>
+
+    <span class="nx">def</span> <span class="nx">authenticate</span><span class="p">(</span><span class="nx">self</span><span class="p">,</span> <span class="nx">email</span><span class="o">=</span><span class="nx">None</span><span class="p">,</span> <span class="nx">password</span><span class="o">=</span><span class="nx">None</span><span class="p">,</span> <span class="err">\</span><span class="o">*</span><span class="err">\</span><span class="o">*</span><span class="nx">kwargs</span><span class="p">)</span><span class="o">:</span>
+        <span class="k">if</span> <span class="nx">email</span> <span class="nx">is</span> <span class="nx">None</span> <span class="nx">or</span> <span class="nx">password</span> <span class="nx">is</span> <span class="nx">None</span>:  
+            <span class="kt">return</span> <span class="nx">None</span>
+        <span class="k">try</span><span class="o">:</span>  
+            <span class="nx">user</span> <span class="o">=</span> <span class="nx">User</span><span class="p">.</span><span class="nx">objects</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">email</span><span class="o">=</span><span class="nx">email</span><span class="p">)</span>  
+            <span class="k">if</span> <span class="nx">user</span><span class="p">.</span><span class="nx">check_password</span><span class="p">(</span><span class="nx">password</span><span class="p">)</span><span class="o">:</span>  
+                <span class="k">return</span> <span class="nx">user</span>  
+        <span class="nx">except</span> <span class="nx">User.DoesNotExist</span>:  
+            <span class="kt">return</span>
+</pre></div>
+
+
 <p>Un cop que tenim el backend implementat l'hem d'afegir als "settings"
 per tal que Django ho tingui en compte:</p>
-<p>[sourcecode language="python"]<br>
-AUTHENTICATION_BACKENDS = (<br>
-'authentication.MyCustomEmailAuthBackend',<br>
-'django.contrib.auth.backends.ModelBackend',<br>
-)<br>
-[/sourcecode]<br>
-Aleshores si el nostre formulari posteja l'email i la contrasenya ja ens
+<div class="highlight"><pre><span></span>AUTHENTICATION\_BACKENDS = (  
+    &#39;authentication.MyCustomEmailAuthBackend&#39;,  
+    &#39;django.contrib.auth.backends.ModelBackend&#39;,  
+)
+</pre></div>
+
+
+<p>Aleshores si el nostre formulari posteja l'email i la contrasenya ja ens
 podrem autenticar.</p>
             <hr>
               <!-- Pagination -->

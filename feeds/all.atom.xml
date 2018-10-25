@@ -346,103 +346,102 @@ http://es.lamevaweb.com
 http://de.lamevaweb.com  
 http://en.lamevaweb.com
 &lt;/pre&gt;&lt;/div&gt;</content></entry><entry><title>Customització de backend d'autenticació amb Django</title><link href="https://blog.espontas.com/blog/customitzacio-de-backend-dautenticacio-amb-django" rel="alternate"></link><published>2015-12-30T10:11:00+01:00</published><updated>2015-12-30T10:11:00+01:00</updated><author><name>blogadmin</name></author><id>tag:blog.espontas.com,2015-12-30:/blog/customitzacio-de-backend-dautenticacio-amb-django</id><summary type="html">&lt;p&gt;Per defecte Django empra el backend d'autenticació "ModelBackend"&lt;/p&gt;
-&lt;p&gt;[sourcecode language="python"]&lt;br&gt;
-AUTHENTICATION_BACKENDS = (&lt;br&gt;
-'django.contrib.auth.backends.ModelBackend',&lt;br&gt;
-)&lt;br&gt;
-[/sourcecode]&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;AUTHENTICATION\_BACKENDS = (  
+    &amp;#39;django.contrib.auth.backends.ModelBackend&amp;#39;,  
+)
+&lt;/pre&gt;&lt;/div&gt;
+
+
 &lt;p&gt;Aquest "backend" intenta autenticara partir del nom d'usuari i la
 contrasenya que reb. Nogensmenys es pot donar el cas que vulguem
 autenticar a partir de l'email de l'usuari.&lt;!--more--&gt;&lt;/p&gt;
-&lt;p&gt;Per aquest cas ho …&lt;/p&gt;</summary><content type="html">&lt;p&gt;Per defecte Django empra el backend d'autenticació "ModelBackend"&lt;/p&gt;
-&lt;p&gt;[sourcecode language="python"]&lt;br&gt;
-AUTHENTICATION_BACKENDS = (&lt;br&gt;
-'django.contrib.auth.backends.ModelBackend',&lt;br&gt;
-)&lt;br&gt;
-[/sourcecode]&lt;/p&gt;
+&lt;p&gt;Per aquest cas ho podem fer estenent …&lt;/p&gt;</summary><content type="html">&lt;p&gt;Per defecte Django empra el backend d'autenticació "ModelBackend"&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;AUTHENTICATION\_BACKENDS = (  
+    &amp;#39;django.contrib.auth.backends.ModelBackend&amp;#39;,  
+)
+&lt;/pre&gt;&lt;/div&gt;
+
+
 &lt;p&gt;Aquest "backend" intenta autenticara partir del nom d'usuari i la
 contrasenya que reb. Nogensmenys es pot donar el cas que vulguem
 autenticar a partir de l'email de l'usuari.&lt;!--more--&gt;&lt;/p&gt;
 &lt;p&gt;Per aquest cas ho podem fer estenent la classe "ModelBackend" i
 reimplementant el mètode autenticate:&lt;/p&gt;
-&lt;p&gt;[sourcecode language="python"]&lt;br&gt;
-class MyCustomEmailAuthBackend(ModelBackend):&lt;br&gt;
-"""&lt;br&gt;
-Allow users to log in with their email address&lt;br&gt;
-"""&lt;/p&gt;
-&lt;p&gt;def authenticate(self, email=None, password=None, **kwargs):&lt;/p&gt;
-&lt;p&gt;if email is None or password is None:&lt;br&gt;
-return None&lt;/p&gt;
-&lt;p&gt;try:&lt;br&gt;
-user = User.objects.get(email=email)&lt;br&gt;
-if user.check_password(password):&lt;br&gt;
-return user&lt;br&gt;
-except User.DoesNotExist:&lt;br&gt;
-return None&lt;br&gt;
-[/sourcecode]&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kr"&gt;class&lt;/span&gt; &lt;span class="nx"&gt;MyCustomEmailAuthBackend&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;ModelBackend&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;  
+    &lt;span class="s2"&gt;&amp;quot;&amp;quot;&amp;quot;  &lt;/span&gt;
+&lt;span class="s2"&gt;    Allow users to log in with their email address  &lt;/span&gt;
+&lt;span class="s2"&gt;    &amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
+
+    &lt;span class="nx"&gt;def&lt;/span&gt; &lt;span class="nx"&gt;authenticate&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;email&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="nx"&gt;None&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;password&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="nx"&gt;None&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="err"&gt;\&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="err"&gt;\&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="nx"&gt;kwargs&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;
+        &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="nx"&gt;email&lt;/span&gt; &lt;span class="nx"&gt;is&lt;/span&gt; &lt;span class="nx"&gt;None&lt;/span&gt; &lt;span class="nx"&gt;or&lt;/span&gt; &lt;span class="nx"&gt;password&lt;/span&gt; &lt;span class="nx"&gt;is&lt;/span&gt; &lt;span class="nx"&gt;None&lt;/span&gt;:  
+            &lt;span class="kt"&gt;return&lt;/span&gt; &lt;span class="nx"&gt;None&lt;/span&gt;
+        &lt;span class="k"&gt;try&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;  
+            &lt;span class="nx"&gt;user&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;User&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;objects&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;get&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;email&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="nx"&gt;email&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;  
+            &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="nx"&gt;user&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;check_password&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;password&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;  
+                &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="nx"&gt;user&lt;/span&gt;  
+        &lt;span class="nx"&gt;except&lt;/span&gt; &lt;span class="nx"&gt;User.DoesNotExist&lt;/span&gt;:  
+            &lt;span class="kt"&gt;return&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
 &lt;p&gt;Un cop que tenim el backend implementat l'hem d'afegir als "settings"
 per tal que Django ho tingui en compte:&lt;/p&gt;
-&lt;p&gt;[sourcecode language="python"]&lt;br&gt;
-AUTHENTICATION_BACKENDS = (&lt;br&gt;
-'authentication.MyCustomEmailAuthBackend',&lt;br&gt;
-'django.contrib.auth.backends.ModelBackend',&lt;br&gt;
-)&lt;br&gt;
-[/sourcecode]&lt;br&gt;
-Aleshores si el nostre formulari posteja l'email i la contrasenya ja ens
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;AUTHENTICATION\_BACKENDS = (  
+    &amp;#39;authentication.MyCustomEmailAuthBackend&amp;#39;,  
+    &amp;#39;django.contrib.auth.backends.ModelBackend&amp;#39;,  
+)
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Aleshores si el nostre formulari posteja l'email i la contrasenya ja ens
 podrem autenticar.&lt;/p&gt;</content></entry><entry><title>Formateig per defecte de les dates amb Django</title><link href="https://blog.espontas.com/blog/formateig-per-defecte-de-les-dates-amb-django" rel="alternate"></link><published>2015-09-13T21:32:00+02:00</published><updated>2015-09-13T21:32:00+02:00</updated><author><name>blogadmin</name></author><id>tag:blog.espontas.com,2015-09-13:/blog/formateig-per-defecte-de-les-dates-amb-django</id><summary type="html">&lt;p&gt;Al principi de començar amb &lt;strong&gt;Django&lt;/strong&gt; me vaig trobar amb el problema
 del format de les dates. Per a la part de frontend no és massa
 problemàtic ja que podem fixar noltros el format de cada data en
-particular. Per exemple:&lt;br&gt;
-[sourcecode language="python"]&lt;br&gt;
-&amp;lt;p&amp;gt;{% trans 'Fecha salida' %}: {{
-reservation.departure_date_res …&lt;/p&gt;</summary><content type="html">&lt;p&gt;Al principi de començar amb &lt;strong&gt;Django&lt;/strong&gt; me vaig trobar amb el problema
+particular. Per exemple:  &lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="cp"&gt;{%&lt;/span&gt; &lt;span class="k"&gt;trans&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;Fecha salida&amp;#39;&lt;/span&gt; &lt;span class="cp"&gt;%}&lt;/span&gt;&lt;span class="x"&gt;: &lt;/span&gt;&lt;span class="cp"&gt;{{&lt;/span&gt; &lt;span class="nv"&gt;reservation.departure_date_res&lt;/span&gt;&lt;span class="o"&gt;|&lt;/span&gt;&lt;span class="nf"&gt;date&lt;/span&gt;&lt;span class="s1"&gt;:&amp;#39;d/m/Y …&lt;/span&gt;&lt;/pre&gt;&lt;/div&gt;</summary><content type="html">&lt;p&gt;Al principi de començar amb &lt;strong&gt;Django&lt;/strong&gt; me vaig trobar amb el problema
 del format de les dates. Per a la part de frontend no és massa
 problemàtic ja que podem fixar noltros el format de cada data en
-particular. Per exemple:&lt;br&gt;
-[sourcecode language="python"]&lt;br&gt;
-&amp;lt;p&amp;gt;{% trans 'Fecha salida' %}: {{
-reservation.departure_date_res|date:'d/m/Y' }}&amp;lt;/p&amp;gt;&lt;br&gt;
-[/sourcecode]&lt;br&gt;
-El problema sorgeix amb, per exemple, el format de les dates de
+particular. Per exemple:  &lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="cp"&gt;{%&lt;/span&gt; &lt;span class="k"&gt;trans&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;Fecha salida&amp;#39;&lt;/span&gt; &lt;span class="cp"&gt;%}&lt;/span&gt;&lt;span class="x"&gt;: &lt;/span&gt;&lt;span class="cp"&gt;{{&lt;/span&gt; &lt;span class="nv"&gt;reservation.departure_date_res&lt;/span&gt;&lt;span class="o"&gt;|&lt;/span&gt;&lt;span class="nf"&gt;date&lt;/span&gt;&lt;span class="s1"&gt;:&amp;#39;d/m/Y&amp;#39;&lt;/span&gt; &lt;span class="cp"&gt;}}&lt;/span&gt;&lt;span class="x"&gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;El problema sorgeix amb, per exemple, el format de les dates de
 l'administrador, el qual està determinat pels valors per defecte de
-django. &lt;!--more--&gt;&lt;/p&gt;
+django.&lt;/p&gt;
 &lt;p&gt;Aquests solen variar en funció de l'idioma de l'usuari i/o del
 navegador. Per corregir aquests fet, &lt;strong&gt;Django&lt;/strong&gt; ens proporciona un
 mètode per poder fixar els formats per defecte de les dates. Al
 directori on està definit el projecte s'ha de creat una carpeta
-"formats" que contingui un directori per a cada idioma (es, ca, de, en,
-...) i que, cadascuna d'aquestes contingui un arxiu "formats.py" amb els
-formats de les dates. Per exemple:&lt;br&gt;
-&lt;a href="http://www.espontas.com/wp-content/uploads/captura-date-formats.png"&gt;&lt;img alt="captura date
-formats" src="http://www.espontas.com/wp-content/uploads/captura-date-formats.png"&gt;{.alignleft
-.size-full .wp-image-378 width="861"
-height="462"}&lt;/a&gt;&lt;br&gt;
-Llavors al settings.py s'ha d'afegir una linia per indicar d'on s'ha
+"formats" que contingui un directori per a cada idioma (es, ca, de, en, ...) i que, cadascuna d'aquestes contingui un arxiu "formats.py" amb els
+formats de les dates. &lt;/p&gt;
+&lt;p&gt;Llavors al settings.py s'ha d'afegir una linia per indicar d'on s'ha
 d'agafar el format de les dates:&lt;/p&gt;
-&lt;p&gt;[sourcecode language="python"]&lt;br&gt;
-FORMAT_MODULE_PATH = 'balearictransfer.formats'&lt;br&gt;
-[/sourcecode]&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;FORMAT_MODULE_PATH = &amp;#39;balearictransfer.formats&amp;#39;
+&lt;/pre&gt;&lt;/div&gt;
+
+
 &lt;p&gt;També es poden indicar el format de les dates pels "inputs" de les
 dates, així com el separador decimal o de mils, per exemple:&lt;/p&gt;
-&lt;p&gt;[sourcecode language="python"]&lt;br&gt;
-DATE_INPUT_FORMATS = (&lt;br&gt;
-'%d-%m-%Y', # '21-03-2014'&lt;br&gt;
-)&lt;br&gt;
-TIME_INPUT_FORMATS = (&lt;br&gt;
-'%H:%M:%S', # '17:59:59'&lt;br&gt;
-'%H:%M', # '17:59'&lt;br&gt;
-)&lt;br&gt;
-DATETIME_INPUT_FORMATS = (&lt;br&gt;
-'%d-%m-%Y %H:%M', # '21-03-2014 17:59'&lt;br&gt;
-)&lt;/p&gt;
-&lt;p&gt;DECIMAL_SEPARATOR = u'.'&lt;br&gt;
-THOUSAND_SEPARATOR = u','&lt;br&gt;
-NUMBER_GROUPING = 3&lt;br&gt;
-[/sourcecode]&lt;/p&gt;
-&lt;p&gt;A &lt;strong&gt;Github&lt;/strong&gt; podeu trobar un &lt;a href="https://github.com/andilabs/demo_time_set"&gt;projecte de
-mostra&lt;/a&gt; que explica com
-funciona el tema. I també la &lt;a href="http://stackoverflow.com/a/22565251"&gt;pertinent
-explicació&lt;/a&gt; a &lt;strong&gt;Stack Overflow&lt;/strong&gt;&lt;/p&gt;</content><category term="date format"></category><category term="django"></category><category term="strftime"></category></entry><entry><title>About development</title><link href="https://blog.espontas.com/blog/368" rel="alternate"></link><published>2015-09-13T12:27:00+02:00</published><updated>2015-09-13T12:27:00+02:00</updated><author><name>blogadmin</name></author><id>tag:blog.espontas.com,2015-09-13:/blog/368</id><summary type="html">&lt;blockquote&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;DATE_INPUT_FORMATS = (  
+    &amp;#39;%d-%m-%Y&amp;#39;, # &amp;#39;21-03-2014&amp;#39;  
+)  
+TIME_INPUT_FORMATS = (  
+    &amp;#39;%H:%M:%S&amp;#39;, # &amp;#39;17:59:59&amp;#39;  
+    &amp;#39;%H:%M&amp;#39;, # &amp;#39;17:59&amp;#39;  
+)  
+DATETIME_INPUT_FORMATS = (  
+    &amp;#39;%d-%m-%Y %H:%M&amp;#39;, # &amp;#39;21-03-2014 17:59&amp;#39;  
+)
+
+DECIMAL_SEPARATOR = u&amp;#39;.&amp;#39;  
+THOUSAND_SEPARATOR = u&amp;#39;,&amp;#39;  
+NUMBER_GROUPING = 3
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;A &lt;strong&gt;Github&lt;/strong&gt; podeu trobar un &lt;a href="https://github.com/andilabs/demo_time_set"&gt;projecte de mostra&lt;/a&gt; que explica com
+funciona el tema. I també la &lt;a href="http://stackoverflow.com/a/22565251"&gt;pertinent explicació&lt;/a&gt; a &lt;strong&gt;Stack Overflow&lt;/strong&gt;&lt;/p&gt;</content><category term="date format"></category><category term="django"></category><category term="strftime"></category></entry><entry><title>About development</title><link href="https://blog.espontas.com/blog/368" rel="alternate"></link><published>2015-09-13T12:27:00+02:00</published><updated>2015-09-13T12:27:00+02:00</updated><author><name>blogadmin</name></author><id>tag:blog.espontas.com,2015-09-13:/blog/368</id><summary type="html">&lt;blockquote&gt;
 &lt;p&gt;"Top notch development teams don't torture their programmers. Even
 minor frustrations caused by using underpowered tools add up, making
 programmers grumpy and unhappy. And a grumpy programmer is an
@@ -473,24 +472,26 @@ per tal d'editar les relacions 1-n amb Django. Tambe tenir
 ens "dinamitza" a través de Javascript la inserció i eliminació de
 tuples dels&lt;strong&gt; "formsets"&lt;/strong&gt;.&lt;!--more--&gt;&lt;/p&gt;
 &lt;p&gt;Per instal.lar les "django extra views" cal executar:&lt;/p&gt;
-&lt;p&gt;[sourcecode language="bash" wraplines="false" collapse="false"]&lt;br&gt;
-pip install django-extra-views&lt;br&gt;
-[/sourcecode]&lt;/p&gt;
-&lt;p&gt;Per instal.lar django-formset-js cal executar:&lt;br&gt;
-[sourcecode language="bash" wraplines="false" collapse="false"]&lt;br&gt;
-pip install django-formset-js&lt;br&gt;
-[/sourcecode]&lt;br&gt;
-i afegir l'aplicació al projecte:&lt;br&gt;
-[sourcecode language="python" wraplines="false" collapse="false"]&lt;br&gt;
-INSTALLED_APPS = (&lt;br&gt;
-...&lt;br&gt;
-'djangoformsetjs',&lt;br&gt;
-)&lt;br&gt;
-[/sourcecode]&lt;/p&gt;
-&lt;p&gt;Detallant els passos, que serien:&lt;br&gt;
-&lt;strong&gt;Views&lt;/strong&gt;:&lt;/p&gt;
-&lt;p&gt;[sourcecode language="python" wraplines="false" collapse="false"]&lt;br&gt;
-# -*- encoding: utf-8 -*-&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;pip install django-extra-views
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Per instal.lar django-formset-js cal executar:  &lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;pip install django-formset-js
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;i afegir l'aplicació al projecte:  &lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;INSTALLED\_APPS = (  
+    ...  
+    &amp;#39;djangoformsetjs&amp;#39;,  
+)
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Detallant els passos, que serien:&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Views&lt;/strong&gt;:&lt;/p&gt;
+&lt;h1&gt;-&lt;em&gt;- encoding: utf-8 -&lt;/em&gt;-&lt;/h1&gt;
 &lt;p&gt;from crispy_forms.helper import FormHelper&lt;br&gt;
 from crispy_forms.layout import Layout&lt;br&gt;
 from crispy_forms.layout import Div&lt;/p&gt;
@@ -501,31 +502,31 @@ from backoffice.cars.models import AssuranceFeaturePrice,
 EquipmentPrice, ChargePrice&lt;br&gt;
 from cms.cmscars.office.forms import AssuranceFeaturePriceForm,
 EquipmentPriceForm, ChargePriceForm&lt;/p&gt;
-&lt;p&gt;#########&lt;br&gt;
-# views #&lt;br&gt;
-#########&lt;/p&gt;
-&lt;p&gt;class AssuranceFeaturePricesInline(InlineFormSet):&lt;br&gt;
-model = AssuranceFeaturePrice&lt;br&gt;
-form_class = AssuranceFeaturePriceForm&lt;br&gt;
-extra = 0&lt;/p&gt;
-&lt;p&gt;class EquipmentPricesInline(InlineFormSet):&lt;br&gt;
-model = EquipmentPrice&lt;br&gt;
-form_class = EquipmentPriceForm&lt;br&gt;
-extra = 0&lt;/p&gt;
-&lt;p&gt;class ChargePricesInline(InlineFormSet):&lt;br&gt;
-model = ChargePrice&lt;br&gt;
-form_class = ChargePriceForm&lt;br&gt;
-extra = 0&lt;/p&gt;
-&lt;p&gt;class OfficeCreateView(CreateWithInlinesView):&lt;br&gt;
-inlines = [AssuranceFeaturePricesInline, EquipmentPricesInline,
-ChargePricesInline]&lt;br&gt;
-pass&lt;/p&gt;
-&lt;p&gt;class OfficeUpdateView(UpdateWithInlinesView):&lt;br&gt;
-inlines = [AssuranceFeaturePricesInline, EquipmentPricesInline,
-ChargePricesInline]&lt;br&gt;
-pass&lt;br&gt;
-[/sourcecode]&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Forms&lt;/strong&gt;:&lt;/p&gt;
+&lt;h4&gt;views.py&lt;/h4&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;    &lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;AssuranceFeaturePricesInline&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;InlineFormSet&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;  
+        &lt;span class="n"&gt;model&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;AssuranceFeaturePrice&lt;/span&gt;  
+        &lt;span class="n"&gt;form_class&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;AssuranceFeaturePriceForm&lt;/span&gt;  
+        &lt;span class="n"&gt;extra&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;
+
+    &lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;EquipmentPricesInline&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;InlineFormSet&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;  
+        &lt;span class="n"&gt;model&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;EquipmentPrice&lt;/span&gt;  
+        &lt;span class="n"&gt;form_class&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;EquipmentPriceForm&lt;/span&gt;  
+        &lt;span class="n"&gt;extra&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;
+
+    &lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;ChargePricesInline&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;InlineFormSet&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;  
+        &lt;span class="n"&gt;model&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;ChargePrice&lt;/span&gt;  
+        &lt;span class="n"&gt;form_class&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;ChargePriceForm&lt;/span&gt;  
+        &lt;span class="n"&gt;extra&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;
+
+    &lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;OfficeCreateView&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;CreateWithInlinesView&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;  
+        &lt;span class="n"&gt;inlines&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;AssuranceFeaturePricesInline&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;EquipmentPricesInline&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;ChargePricesInline&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;  
+
+    &lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;OfficeUpdateView&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;UpdateWithInlinesView&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;  
+        &lt;span class="n"&gt;inlines&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;AssuranceFeaturePricesInline&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;EquipmentPricesInline&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;ChargePricesInline&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;  
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h4&gt;forms.py&lt;/h4&gt;
 &lt;p&gt;[sourcecode language="python" wraplines="false" collapse="false"]&lt;br&gt;
 class AssuranceFeaturePriceForm(forms.ModelForm):&lt;/p&gt;
 &lt;p&gt;class Meta:&lt;br&gt;
@@ -625,28 +626,31 @@ registro' %}&lt;br&gt;
 &lt;p&gt;&amp;lt;!-- fin formsets --&amp;gt;&lt;br&gt;
 &amp;lt;/form&amp;gt;&lt;/p&gt;
 &lt;p&gt;{% endblock content2 %}&lt;/p&gt;
-&lt;p&gt;{% block extrajs %}&lt;br&gt;
-&amp;lt;script type="text/javascript" src="{% static
-'js/jquery.formset.min.js' %}"&amp;gt;&amp;lt;/script&amp;gt;&lt;br&gt;
-&amp;lt;script type="text/javascript"&amp;gt;&lt;br&gt;
-//&amp;lt;![CDATA[ \$(function(\$) { \$(".formset").formset({
-animateForms: true, reorderMode: 'none', }); }); //]]&amp;gt;&lt;br&gt;
-&amp;lt;/script&amp;gt;&lt;br&gt;
-{% endblock %}&lt;br&gt;
-[/sourcecode]&lt;/p&gt;
-&lt;p&gt;A aquest exemple també es fa ús de &lt;a href="http://django-crispy-forms.readthedocs.org/en/latest/"&gt;Crispy
-Forms&lt;/a&gt;, per tal
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="cp"&gt;{%&lt;/span&gt; &lt;span class="k"&gt;block&lt;/span&gt; &lt;span class="nv"&gt;extrajs&lt;/span&gt; &lt;span class="cp"&gt;%}&lt;/span&gt;  
+&lt;span class="nt"&gt;&amp;lt;script&lt;/span&gt; &lt;span class="na"&gt;type=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;text/javascript&amp;quot;&lt;/span&gt; &lt;span class="na"&gt;src=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&lt;/span&gt;&lt;span class="cp"&gt;{%&lt;/span&gt; &lt;span class="k"&gt;static&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;js/jquery.formset.min.js&amp;#39;&lt;/span&gt; &lt;span class="cp"&gt;%}&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&amp;lt;/script&amp;gt;&lt;/span&gt;  
+&lt;span class="nt"&gt;&amp;lt;script&lt;/span&gt; &lt;span class="na"&gt;type=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;text/javascript&amp;quot;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;  
+//&lt;span class="cp"&gt;&amp;lt;![CDATA[ &lt;/span&gt;
+&lt;span class="cp"&gt;$(function($) { $(&amp;quot;.formset&amp;quot;).formset({&lt;/span&gt;
+&lt;span class="cp"&gt;    animateForms: true, reorderMode: &amp;#39;none&amp;#39;, }); }); //\]\]&amp;gt;&lt;/span&gt;;  
+&lt;span class="nt"&gt;&amp;lt;/script&amp;gt;&lt;/span&gt;;  
+&lt;span class="cp"&gt;{%&lt;/span&gt; &lt;span class="k"&gt;endblock&lt;/span&gt; &lt;span class="cp"&gt;%}&lt;/span&gt;  
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;A aquest exemple també es fa ús de &lt;a href="http://django-crispy-forms.readthedocs.org/en/latest/"&gt;Crispy Forms&lt;/a&gt;, per tal
 de millorar l'aparença dels formularis. Per instal.lar-ho:&lt;/p&gt;
-&lt;p&gt;[sourcecode language="python" wraplines="false" collapse="false"]&lt;br&gt;
-pip install --upgrade django-crispy-forms&lt;br&gt;
-[/sourcecode]&lt;br&gt;
-i afegir l'aplicació al projecte:&lt;br&gt;
-[sourcecode language="python" wraplines="false" collapse="false"]&lt;br&gt;
-INSTALLED_APPS = (&lt;br&gt;
-...&lt;br&gt;
-'crispy_forms',&lt;br&gt;
-)&lt;br&gt;
-[/sourcecode]&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;pip install --upgrade django-crispy-forms
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;i afegir l'aplicació al projecte:  &lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;INSTALLED_APPS&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;  
+    &lt;span class="o"&gt;...&lt;/span&gt;  
+    &lt;span class="s1"&gt;&amp;#39;crispy_forms&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;  
+&lt;span class="p"&gt;)&lt;/span&gt;  
+&lt;/pre&gt;&lt;/div&gt;
+
+
 &lt;p&gt;En aquest cas hi ha varis "formsets" relacionats amb el model principal.
 Per qüestió d'usabilitat s'ha implementat el formset dins un "Tab" del
 formulari principal. L'exemple exposat queda segons es mostra a

@@ -77,24 +77,26 @@ per tal d'editar les relacions 1-n amb Django. Tambe tenir
 ens "dinamitza" a través de Javascript la inserció i eliminació de
 tuples dels<strong> "formsets"</strong>.<!--more--></p>
 <p>Per instal.lar les "django extra views" cal executar:</p>
-<p>[sourcecode language="bash" wraplines="false" collapse="false"]<br>
-pip install django-extra-views<br>
-[/sourcecode]</p>
-<p>Per instal.lar django-formset-js cal executar:<br>
-[sourcecode language="bash" wraplines="false" collapse="false"]<br>
-pip install django-formset-js<br>
-[/sourcecode]<br>
-i afegir l'aplicació al projecte:<br>
-[sourcecode language="python" wraplines="false" collapse="false"]<br>
-INSTALLED_APPS = (<br>
-...<br>
-'djangoformsetjs',<br>
-)<br>
-[/sourcecode]</p>
-<p>Detallant els passos, que serien:<br>
-<strong>Views</strong>:</p>
-<p>[sourcecode language="python" wraplines="false" collapse="false"]<br>
-# -*- encoding: utf-8 -*-</p>
+<div class="highlight"><pre><span></span>pip install django-extra-views
+</pre></div>
+
+
+<p>Per instal.lar django-formset-js cal executar:  </p>
+<div class="highlight"><pre><span></span>pip install django-formset-js
+</pre></div>
+
+
+<p>i afegir l'aplicació al projecte:  </p>
+<div class="highlight"><pre><span></span>INSTALLED\_APPS = (  
+    ...  
+    &#39;djangoformsetjs&#39;,  
+)
+</pre></div>
+
+
+<p>Detallant els passos, que serien:</p>
+<p><strong>Views</strong>:</p>
+<h1>-<em>- encoding: utf-8 -</em>-</h1>
 <p>from crispy_forms.helper import FormHelper<br>
 from crispy_forms.layout import Layout<br>
 from crispy_forms.layout import Div</p>
@@ -105,31 +107,31 @@ from backoffice.cars.models import AssuranceFeaturePrice,
 EquipmentPrice, ChargePrice<br>
 from cms.cmscars.office.forms import AssuranceFeaturePriceForm,
 EquipmentPriceForm, ChargePriceForm</p>
-<p>#########<br>
-# views #<br>
-#########</p>
-<p>class AssuranceFeaturePricesInline(InlineFormSet):<br>
-model = AssuranceFeaturePrice<br>
-form_class = AssuranceFeaturePriceForm<br>
-extra = 0</p>
-<p>class EquipmentPricesInline(InlineFormSet):<br>
-model = EquipmentPrice<br>
-form_class = EquipmentPriceForm<br>
-extra = 0</p>
-<p>class ChargePricesInline(InlineFormSet):<br>
-model = ChargePrice<br>
-form_class = ChargePriceForm<br>
-extra = 0</p>
-<p>class OfficeCreateView(CreateWithInlinesView):<br>
-inlines = [AssuranceFeaturePricesInline, EquipmentPricesInline,
-ChargePricesInline]<br>
-pass</p>
-<p>class OfficeUpdateView(UpdateWithInlinesView):<br>
-inlines = [AssuranceFeaturePricesInline, EquipmentPricesInline,
-ChargePricesInline]<br>
-pass<br>
-[/sourcecode]</p>
-<p><strong>Forms</strong>:</p>
+<h4>views.py</h4>
+<div class="highlight"><pre><span></span>    <span class="k">class</span> <span class="nc">AssuranceFeaturePricesInline</span><span class="p">(</span><span class="n">InlineFormSet</span><span class="p">):</span>  
+        <span class="n">model</span> <span class="o">=</span> <span class="n">AssuranceFeaturePrice</span>  
+        <span class="n">form_class</span> <span class="o">=</span> <span class="n">AssuranceFeaturePriceForm</span>  
+        <span class="n">extra</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">class</span> <span class="nc">EquipmentPricesInline</span><span class="p">(</span><span class="n">InlineFormSet</span><span class="p">):</span>  
+        <span class="n">model</span> <span class="o">=</span> <span class="n">EquipmentPrice</span>  
+        <span class="n">form_class</span> <span class="o">=</span> <span class="n">EquipmentPriceForm</span>  
+        <span class="n">extra</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">class</span> <span class="nc">ChargePricesInline</span><span class="p">(</span><span class="n">InlineFormSet</span><span class="p">):</span>  
+        <span class="n">model</span> <span class="o">=</span> <span class="n">ChargePrice</span>  
+        <span class="n">form_class</span> <span class="o">=</span> <span class="n">ChargePriceForm</span>  
+        <span class="n">extra</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">class</span> <span class="nc">OfficeCreateView</span><span class="p">(</span><span class="n">CreateWithInlinesView</span><span class="p">):</span>  
+        <span class="n">inlines</span> <span class="o">=</span> <span class="p">[</span><span class="n">AssuranceFeaturePricesInline</span><span class="p">,</span> <span class="n">EquipmentPricesInline</span><span class="p">,</span> <span class="n">ChargePricesInline</span><span class="p">]</span>  
+
+    <span class="k">class</span> <span class="nc">OfficeUpdateView</span><span class="p">(</span><span class="n">UpdateWithInlinesView</span><span class="p">):</span>  
+        <span class="n">inlines</span> <span class="o">=</span> <span class="p">[</span><span class="n">AssuranceFeaturePricesInline</span><span class="p">,</span> <span class="n">EquipmentPricesInline</span><span class="p">,</span> <span class="n">ChargePricesInline</span><span class="p">]</span>  
+</pre></div>
+
+
+<h4>forms.py</h4>
 <p>[sourcecode language="python" wraplines="false" collapse="false"]<br>
 class AssuranceFeaturePriceForm(forms.ModelForm):</p>
 <p>class Meta:<br>
@@ -229,28 +231,31 @@ registro' %}<br>
 <p>&lt;!-- fin formsets --&gt;<br>
 &lt;/form&gt;</p>
 <p>{% endblock content2 %}</p>
-<p>{% block extrajs %}<br>
-&lt;script type="text/javascript" src="{% static
-'js/jquery.formset.min.js' %}"&gt;&lt;/script&gt;<br>
-&lt;script type="text/javascript"&gt;<br>
-//&lt;![CDATA[ \$(function(\$) { \$(".formset").formset({
-animateForms: true, reorderMode: 'none', }); }); //]]&gt;<br>
-&lt;/script&gt;<br>
-{% endblock %}<br>
-[/sourcecode]</p>
-<p>A aquest exemple també es fa ús de <a href="http://django-crispy-forms.readthedocs.org/en/latest/">Crispy
-Forms</a>, per tal
+<div class="highlight"><pre><span></span><span class="cp">{%</span> <span class="k">block</span> <span class="nv">extrajs</span> <span class="cp">%}</span>  
+<span class="nt">&lt;script</span> <span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">src=</span><span class="s">&quot;</span><span class="cp">{%</span> <span class="k">static</span> <span class="s1">&#39;js/jquery.formset.min.js&#39;</span> <span class="cp">%}</span><span class="s">&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>  
+<span class="nt">&lt;script</span> <span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;</span>  
+//<span class="cp">&lt;![CDATA[ </span>
+<span class="cp">$(function($) { $(&quot;.formset&quot;).formset({</span>
+<span class="cp">    animateForms: true, reorderMode: &#39;none&#39;, }); }); //\]\]&gt;</span>;  
+<span class="nt">&lt;/script&gt;</span>;  
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span>  
+</pre></div>
+
+
+<p>A aquest exemple també es fa ús de <a href="http://django-crispy-forms.readthedocs.org/en/latest/">Crispy Forms</a>, per tal
 de millorar l'aparença dels formularis. Per instal.lar-ho:</p>
-<p>[sourcecode language="python" wraplines="false" collapse="false"]<br>
-pip install --upgrade django-crispy-forms<br>
-[/sourcecode]<br>
-i afegir l'aplicació al projecte:<br>
-[sourcecode language="python" wraplines="false" collapse="false"]<br>
-INSTALLED_APPS = (<br>
-...<br>
-'crispy_forms',<br>
-)<br>
-[/sourcecode]</p>
+<div class="highlight"><pre><span></span>pip install --upgrade django-crispy-forms
+</pre></div>
+
+
+<p>i afegir l'aplicació al projecte:  </p>
+<div class="highlight"><pre><span></span><span class="n">INSTALLED_APPS</span> <span class="o">=</span> <span class="p">(</span>  
+    <span class="o">...</span>  
+    <span class="s1">&#39;crispy_forms&#39;</span><span class="p">,</span>  
+<span class="p">)</span>  
+</pre></div>
+
+
 <p>En aquest cas hi ha varis "formsets" relacionats amb el model principal.
 Per qüestió d'usabilitat s'ha implementat el formset dins un "Tab" del
 formulari principal. L'exemple exposat queda segons es mostra a
