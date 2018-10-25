@@ -50,8 +50,8 @@ DEFAULT_PAGINATION = 5
 # Uncomment following line if you want document-relative URLs when developing
 # RELATIVE_URLS = True
 THEME = 'themes/halcyonic'
-PLUGIN_PATHS = ['/var/www/pelican-plugins']
-PLUGINS = ['plugins/neighbors']
+PLUGIN_PATHS = ['plugins']
+PLUGINS = ['neighbors']
 
 ARTICLE_URL = 'blog/{slug}'
 ARTICLE_SAVE_AS = 'blog/{slug}.html'
