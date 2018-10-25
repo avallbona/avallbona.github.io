@@ -1911,3 +1911,9 @@ hr {
 	width:33%;
 	margin-bottom: 35px;
 }
+
+.highlight {
+	font-family: monospace;
+	font-size: 13px;
+	line-height: 18px;
+}

@@ -4,6 +4,16 @@
             <script src="/{{THEME_STATIC_DIR}}/js/util.js"></script>
             <!--[if lte IE 8]><script src="/{{THEME_STATIC_DIR}}/js/ie/respond.min.js"></script><![endif]-->
             <script src="/{{THEME_STATIC_DIR}}/js/main.js"></script>
+
+            <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
+            <script type="text/javascript">
+                $(document).ready(function() {
+                  $('div.highlight').each(function(i, block) {
+                    hljs.highlightBlock(block);
+                  });
+                });
+            </script>
+
             {% if GOOGLE_ANALYTICS %}
             <script type="text/javascript">
             var _gaq = _gaq || [];

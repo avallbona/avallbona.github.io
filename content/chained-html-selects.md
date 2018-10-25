@@ -12,61 +12,61 @@ Fa un temps que he descobert un "plugin" jQuery que va força be per encadenar <
 La idea és crear codi html per tal que es mostri similar a la següent manera, és a dir, que la clau dels valors del primer select es fixin com a css class dels options del segon select.
 
 ```html
-<select id="mark" name="mark">
-  <option value="">--</option>
-  <option value="bmw">BMW</option>
-  <option value="audi">Audi</option>
-</select>
-<select id="series" name="series">
-  <option value="">--</option>
-  <option value="series-3" class="bmw">3 series</option>
-  <option value="series-5" class="bmw">5 series</option>
-  <option value="series-6" class="bmw">6 series</option>
-  <option value="a3" class="audi">A3</option>
-  <option value="a4" class="audi">A4</option>
-  <option value="a5" class="audi">A5</option>
-</select>
+    <select id="mark" name="mark">
+      <option value="">--</option>
+      <option value="bmw">BMW</option>
+      <option value="audi">Audi</option>
+    </select>
+    <select id="series" name="series">
+      <option value="">--</option>
+      <option value="series-3" class="bmw">3 series</option>
+      <option value="series-5" class="bmw">5 series</option>
+      <option value="series-6" class="bmw">6 series</option>
+      <option value="a3" class="audi">A3</option>
+      <option value="a4" class="audi">A4</option>
+      <option value="a5" class="audi">A5</option>
+    </select>
 ```
 
 Aixi doncs per fer que aixo sigui possible en Django estendrem i customitzarem el widget <em>Select</em> que ve per defecte amb django.forms. 
 
 ```python
 
-# -*- encoding: utf-8 -*-
+    # -*- encoding: utf-8 -*-
 
-from django.forms.widgets import Select
-from django.utils.encoding import force_text
-from django.utils.html import format_html
-from django.utils.safestring import mark_safe
-
-
-class CustomSelect(Select):
-    """
-    Custom widget used in combination with http://www.appelsiini.net/projects/chained
-    in order to have two or more related html select's. Whenever the first select is changed updates
-    the options of the related one
-    """
-
-    def render_option(self, selected_choices, option_value, option_label):
-        if option_value is None or option_value == '':
-            option_value = ''
-            css_class = ''
-        else:
-            css_class, option_value = option_value.split('___')
-
-        option_value = force_text(option_value)
-
-        if option_value in selected_choices:
-            selected_html = mark_safe(' selected="selected"')
-            if not self.allow_multiple_selected:
-                # Only allow for a single selection.
-                selected_choices.remove(option_value)
-        else:
-            selected_html = ''
-        return format_html('<option value="{0}"{1} class="{2}">{3}</option>', option_value, selected_html,
-                           mark_safe(css_class), force_text(option_label))
-
-```
+    from django.forms.widgets import Select
+    from django.utils.encoding import force_text
+    from django.utils.html import format_html
+    from django.utils.safestring import mark_safe
+    
+    
+    class CustomSelect(Select):
+        """
+        Custom widget used in combination with http://www.appelsiini.net/projects/chained
+        in order to have two or more related html select's. Whenever the first select is changed updates
+        the options of the related one
+        """
+    
+        def render_option(self, selected_choices, option_value, option_label):
+            if option_value is None or option_value == '':
+                option_value = ''
+                css_class = ''
+            else:
+                css_class, option_value = option_value.split('___')
+    
+            option_value = force_text(option_value)
+    
+            if option_value in selected_choices:
+                selected_html = mark_safe(' selected="selected"')
+                if not self.allow_multiple_selected:
+                    # Only allow for a single selection.
+                    selected_choices.remove(option_value)
+            else:
+                selected_html = ''
+            return format_html('<option value="{0}"{1} class="{2}">{3}</option>', option_value, selected_html,
+                               mark_safe(css_class), force_text(option_label))
+```    
+    
 
 Llavors el nostre formulari ha de fer ús del "widget" customitzat. En el formulari hem de parar atenció als camps "group" i "type". El camp "type" depen del valor seleccionat a "group". Per a cada valor de "group" hi ha una sèrie de valors a "type". Cada cop que el select de "group" s'actualitzi, es canvii, es recalcularan els valors de "type". Aquesta és la clau del problema, el valor de l'option del segon selector ha d'esser processat per tal d'extreure'n el propi valor de l'option així com el valor de l'element pare dins el primer selector. És per això que al mètode __init__ del formulari customitzam l'atribut "choices" del widget del camp "type", per passar el valor en el format:
 

@@ -35,11 +35,9 @@ class Lower(Lookup):
     """
     Custom lookup for postgres "lower" function implementation
     """
-
     lookup_name = 'lower'
 
     def as_sql(self, qn, connection):
-
         lhs, lhs_params = self.process_lhs(qn, connection)
         rhs, rhs_params = self.process_rhs(qn, connection)
         params = lhs_params + rhs_params
@@ -51,28 +49,29 @@ Field.register_lookup(Lower)
 L'exemple en concret implementa la funcionalitat de comparar el contingut d'un camp en 
 minúscula amb la cadena que nosaltres li passem. Hi ha varis punts importants:
 
-<code>lookup_name = 'lower'</code>
+    lookup_name = 'lower'
 Defineix el nom que emprarem per executar la clàusula.
 
-<code>lhs, lhs_params = self.process_lhs(qn, connection)</code>
+    lhs, lhs_params = self.process_lhs(qn, connection)
 Compila la part esquerra de la clàusula
 
-<code>rhs, rhs_params = self.process_rhs(qn, connection)</code>
+    rhs, rhs_params = self.process_rhs(qn, connection)
 Compila la part dreta de la clàusula
 
-<code>Field.register_lookup(Lower)</code>
+    Field.register_lookup(Lower)
 Registrem el custom lookup per tal de poder-lo emprar.
 
 Finalment, un exemple d'ús del nostre custom lookup seria:
 
+    try:
+        task = TransTask.objects.filter(object_class__lower=class_name).get()
+    except TransTask.DoesNotExist:
+        task = None
 
-```python
-try:
-    task = TransTask.objects.filter(object_class__lower=class_name).get()
-except TransTask.DoesNotExist:
-    task = None
-```
+&nbsp;
 
-<code>object_class__lower=class_name</code>
+    object_class__lower=class_name
 és la part on s'aplica el "custom lookup". Compararà el contingut en minúscula del camp 
-<code>object_class</code> amb el contingut de la variable <code>class_name</code>.
+
+    object_class
+amb el contingut de la variable <code>class_name</code>.
