@@ -13,6 +13,7 @@ feedparser = "*"
 pandoc = "*"
 ghp-import = "*"
 shovel = "*"
+pip = "==18.0"
 
 [dev-packages]
 
