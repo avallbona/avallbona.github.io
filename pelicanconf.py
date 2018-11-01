@@ -37,10 +37,12 @@ MENUITEMS = (
     ('Tags', '/tags'),
     ('Categories', '/categories'),
     ('Archives', '/archives'),
+    ('Talks', '/talks'),
 )
 
 # Social widget
 SOCIAL = (
+    ('Github', 'https://github.com/avallbona'),
     ('LinkedIn', 'https://www.linkedin.com/in/andreu-vallbona-plazas-b0b58720'),
     ('Twitter', 'https://twitter.com/avallbona'),
 )
