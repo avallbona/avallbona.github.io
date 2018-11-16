@@ -11,7 +11,7 @@ But there is still confusion about what problems it solves and how it is
 more useful than the standard workflow using pip and a requirements.txt file. 
 In this talk we will try to explain the solution to these problems.
 
-[Slides](https://www.slideshare.net/AndreuVallbonaPlazas/pipenv-python-dev-workflow-for-humans-118422815)
+[Slides](https://www.slideshare.net/AndreuVallbonaPlazas/pipenv-python-dev-workflow-for-humans-118422815) - [Video](https://www.youtube.com/watch?v=GXdsUw3db_M)
 
 
 ## Pytest: recommendations, basic packages for testing in Python and Django
