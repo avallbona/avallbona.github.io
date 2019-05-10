@@ -16,69 +16,114 @@ to myself and to anybody else, a small clarifitacion on how it works.
 
 Example, given the following models:
 
-    class Artist(models.Model):
-        name = models.CharField(max_length=180)
-    
-        def __str__(self):
-            return self.name
-    
-    
-    class Portfolio(models.Model):
-        user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
-        name = models.CharField(max_length=180)
-        artists = models.ManyToManyField(Artist, through='Calification')
-    
-        def __str__(self):
-            return '{} - {}'.format(self.user, self.name)
-    
-    
-    class Calification(models.Model):
-        portfolio = models.ForeignKey(Portfolio, on_delete=models.CASCADE, related_name='califications')
-        artist = models.ForeignKey(Artist, on_delete=models.CASCADE)
-        rate = models.IntegerField(default=0)
-        added_at = models.DateTimeField(auto_now_add=True)
-    
-        def __str__(self):
-            return '{} - {} - {}'.format(self.portfolio, self.artist, self.rate)
+```python
+class Artist(models.Model):
+    name = models.CharField(max_length=180)
+
+    def __str__(self):
+        return self.name
+
+
+class Portfolio(models.Model):
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    name = models.CharField(max_length=180)
+    artists = models.ManyToManyField(Artist, through='Calification')
+
+    def __str__(self):
+        return '{} - {}'.format(self.user, self.name)
+
+
+class Calification(models.Model):
+    portfolio = models.ForeignKey(Portfolio, on_delete=models.CASCADE, related_name='califications')
+    artist = models.ForeignKey(Artist, on_delete=models.CASCADE)
+    rate = models.IntegerField(default=0)
+    added_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return '{} - {} - {}'.format(self.portfolio, self.artist, self.rate)
+```
     
 We could serialize them as follows:
 
-    class ArtistSerializer(serializers.ModelSerializer):
+```python
 
-        class Meta:
-            model = Artist
-            fields = ('name', )
-    
-    
-    class CalificationSerializer(serializers.ModelSerializer):
-    
-        artist = ArtistSerializer()
-    
-        class Meta:
-            model = Calification
-            fields = ('artist', 'rate', 'added_at')
-    
-    
-    class PortfolioSerializer(serializers.ModelSerializer):
-    
-        artists = CalificationSerializer(many=True, source='califications')
-    
-        class Meta:
-            model = Portfolio
-            fields = ('id', 'name', 'user', 'artists', )
+class ArtistSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Artist
+        fields = ('name', )
+
+
+class CalificationSerializer(serializers.ModelSerializer):
+
+    artist = ArtistSerializer()
+
+    class Meta:
+        model = Calification
+        fields = ('artist', 'rate', 'added_at')
+
+
+class PortfolioSerializer(serializers.ModelSerializer):
+
+    artists = CalificationSerializer(many=True, source='califications')
+
+    class Meta:
+        model = Portfolio
+        fields = ('id', 'name', 'user', 'artists', )
+        
+```
+            
+And we would obtain a result like the following:
+
+```json
+
+[
+    {
+        "id": 1,
+        "name": "Portfolio 1",
+        "user": 1,
+        "califications": [
+            {
+                "artist": {
+                    "name": "Gamma Ray"
+                },
+                "rate": 3,
+                "added_at": "2019-04-13T02:51:38.663626+02:00"
+            },
+            {
+                "artist": {
+                    "name": "Frank Zappa"
+                },
+                "rate": 2,
+                "added_at": "2019-04-13T02:51:38.665095+02:00"
+            },
+            {
+                "artist": {
+                    "name": "Pink Floyd"
+                },
+                "rate": 1,
+                "added_at": "2019-04-13T02:51:38.666302+02:00"
+            }
+        ]
+    }
+]            
+```
             
 
 It's important to remember that it's easier if we set a ``related_name`` to the foreign_key we want to follow from the main model.
 If we don't set it we would have to set the attribute ``source`` of the nested serializer ``CalificationSerializer`` as
 
-    artists = CalificationSerializer(many=True, source='calification_set.all') 
+```python
+artists = CalificationSerializer(many=True, source='calification_set.all')
+```
+ 
 
-By default, relational fields that target a ``ManyToManyField`` with a
-``through`` model specified are set to read-only.
+By default, relational fields that target a **ManyToManyField** with a
+**through** model specified are set to read-only.
 
 If you explicitly specify a relational field pointing to a
-``ManyToManyField`` with a through model, be sure to set ``read_only``
-to ``True``.
+**ManyToManyField** with a through model, be sure to set **read_only**
+to **True**.
 
 
 [django-rest-framework]: https://www.django-rest-framework.org/api-guide/relations/#manytomanyfields-with-a-through-model
