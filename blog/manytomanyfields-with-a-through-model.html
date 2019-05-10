@@ -1,0 +1,258 @@
+<!DOCTYPE HTML>
+<!--
+	halcyonic by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Andreu Vallbona - ManyToManyFields with a Through Model</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="shortcut icon" href="/theme/img/favicon.ico" rel="icon" type="image/x-icon" />
+		<!--[if lte IE 8]><script src="/theme/js/ie/html5shiv.js"></script><![endif]-->
+		<link rel="stylesheet" href="/theme/css/main.css" />
+		<!--[if lte IE 9]><link rel="stylesheet" href="/theme/css/ie9.css" /><![endif]-->
+
+        <!--<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/default.min.css">-->
+        <link rel="stylesheet" href="https://highlightjs.org/static/demo/styles/androidstudio.css">
+
+  		<meta property="og:locale" content="en">
+		<meta property="og:site_name" content="Andreu Vallbona">
+
+  <meta property="og:type" content="article">
+  <meta property="article:author" content="Pelican">
+  <meta property="og:url" content="https://blog.espontas.com/blog/manytomanyfields-with-a-through-model">
+  <meta property="og:title" content="ManyToManyFields with a Through Model">
+  <meta property="og:description" content="Many times I found myself, many collegues and some other people struggling when working with...">
+  <meta property="article:published_time" content="2019-05-10 23:12:00+02:00">
+	</head>
+	<body class="subpage">
+		<div id="page-wrapper">
+
+			<!-- Header -->
+				<div id="header-wrapper">
+					<header id="header" class="container">
+						<div class="row">
+							<div class="12u">
+
+								<!-- Logo -->
+									<h1><a href="/" id="logo">Andreu Vallbona</a></h1>
+
+								<!-- Nav -->
+									<nav id="nav">
+										<a href="/about-me">About me</a>
+										<a href="/tags">Tags</a>
+										<a href="/categories">Categories</a>
+										<a href="/archives">Archives</a>
+										<a href="/talks">Talks</a>
+									</nav>
+
+							</div>
+						</div>
+					</header>
+				</div>
+
+			<!-- Content -->
+				<div id="content-wrapper">
+					<div id="content">
+						<div class="container">
+							<div class="row">
+								<div class="9u 12u(mobile)">
+
+									<!-- Main Content -->
+
+										<section>
+            <header>
+            <h2>ManyToManyFields with a Through Model</h2>
+            <h4>Published on mayo 10th, 2019</h4>
+
+            </header>
+            <p>Many times I found myself, many collegues and some <a href="https://stackoverflow.com/questions/17256724/include-intermediary-through-model-in-responses-in-django-rest-framework">other people</a> struggling 
+when working with <strong>ManyToManyFields</strong> and trying to serialize 
+the relation with a <strong>Through</strong> Model.<!--more--></p>
+<p>I think the official documentation of the amazing <a href="https://www.django-rest-framework.org/api-guide/relations/#manytomanyfields-with-a-through-model">django-rest-framework</a> does not provide 
+a clear example on how to do it (may be it's a to specific use case). So I decided to leave here, as a reminder 
+to myself and to anybody else, a small clarifitacion on how it works.</p>
+<p>Example, given the following models:</p>
+<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Artist</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">180</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+
+
+<span class="k">class</span> <span class="nc">Portfolio</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">get_user_model</span><span class="p">(),</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">CASCADE</span><span class="p">)</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">180</span><span class="p">)</span>
+    <span class="n">artists</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ManyToManyField</span><span class="p">(</span><span class="n">Artist</span><span class="p">,</span> <span class="n">through</span><span class="o">=</span><span class="s1">&#39;Calification&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;{} - {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">Calification</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">portfolio</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Portfolio</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">CASCADE</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;califications&#39;</span><span class="p">)</span>
+    <span class="n">artist</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Artist</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">CASCADE</span><span class="p">)</span>
+    <span class="n">rate</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">added_at</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">auto_now_add</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;{} - {} - {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">portfolio</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">artist</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rate</span><span class="p">)</span>
+</pre></div>
+
+
+<p>We could serialize them as follows:</p>
+<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">ArtistSerializer</span><span class="p">(</span><span class="n">serializers</span><span class="o">.</span><span class="n">ModelSerializer</span><span class="p">):</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">Artist</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">CalificationSerializer</span><span class="p">(</span><span class="n">serializers</span><span class="o">.</span><span class="n">ModelSerializer</span><span class="p">):</span>
+
+    <span class="n">artist</span> <span class="o">=</span> <span class="n">ArtistSerializer</span><span class="p">()</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">Calification</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;artist&#39;</span><span class="p">,</span> <span class="s1">&#39;rate&#39;</span><span class="p">,</span> <span class="s1">&#39;added_at&#39;</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">PortfolioSerializer</span><span class="p">(</span><span class="n">serializers</span><span class="o">.</span><span class="n">ModelSerializer</span><span class="p">):</span>
+
+    <span class="n">artists</span> <span class="o">=</span> <span class="n">CalificationSerializer</span><span class="p">(</span><span class="n">many</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">&#39;califications&#39;</span><span class="p">)</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">Portfolio</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;user&#39;</span><span class="p">,</span> <span class="s1">&#39;artists&#39;</span><span class="p">,</span> <span class="p">)</span>
+</pre></div>
+
+
+<p>And we would obtain a result like the following:</p>
+<div class="highlight"><pre><span></span><span class="p">[</span>
+    <span class="p">{</span>
+        <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Portfolio 1&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;user&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="nt">&quot;califications&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;artist&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Gamma Ray&quot;</span>
+                <span class="p">},</span>
+                <span class="nt">&quot;rate&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+                <span class="nt">&quot;added_at&quot;</span><span class="p">:</span> <span class="s2">&quot;2019-04-13T02:51:38.663626+02:00&quot;</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;artist&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Frank Zappa&quot;</span>
+                <span class="p">},</span>
+                <span class="nt">&quot;rate&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+                <span class="nt">&quot;added_at&quot;</span><span class="p">:</span> <span class="s2">&quot;2019-04-13T02:51:38.665095+02:00&quot;</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;artist&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Pink Floyd&quot;</span>
+                <span class="p">},</span>
+                <span class="nt">&quot;rate&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+                <span class="nt">&quot;added_at&quot;</span><span class="p">:</span> <span class="s2">&quot;2019-04-13T02:51:38.666302+02:00&quot;</span>
+            <span class="p">}</span>
+        <span class="p">]</span>
+    <span class="p">}</span>
+<span class="p">]</span>            
+</pre></div>
+
+
+<p>It's important to remember that it's easier if we set a <code>related_name</code> to the foreign_key we want to follow from the main model.
+If we don't set it we would have to set the attribute <code>source</code> of the nested serializer <code>CalificationSerializer</code> as</p>
+<div class="highlight"><pre><span></span><span class="n">artists</span> <span class="o">=</span> <span class="n">CalificationSerializer</span><span class="p">(</span><span class="n">many</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">&#39;calification_set.all&#39;</span><span class="p">)</span>
+</pre></div>
+
+
+<p>By default, relational fields that target a <strong>ManyToManyField</strong> with a
+<strong>through</strong> model specified are set to read-only.</p>
+<p>If you explicitly specify a relational field pointing to a
+<strong>ManyToManyField</strong> with a through model, be sure to set <strong>read_only</strong>
+to <strong>True</strong>.</p>
+            <hr>
+              <!-- Pagination -->
+            <div class="pagination">
+              <a class="pagination" href="https://blog.espontas.com/blog/chained-html-selects">
+             &larr; Encadenar select's Html amb Django de manera fàcil i poc intrussiva ]
+         </a>
+            </div>
+										</section>
+
+								</div>
+								<div class="3u 12u(mobile)">
+
+									<!-- Sidebar -->
+                                        <section>
+                                            <header>
+                                                <h2>Recent Articles</h2>
+                                            </header>
+                                            <ul class="link-list">
+
+                                                
+                                                <li><a class = "red" href="/blog/manytomanyfields-with-a-through-model">ManyToManyFields with a Through Model</a><br></li>
+
+                                                
+                                                <li><a class = "red" href="/blog/chained-html-selects">Encadenar select's Html amb Django de manera fàcil i poc intrussiva</a><br></li>
+
+                                                
+                                                <li><a class = "red" href="/blog/django-lookup-fields">Lookup fields customitzats en Django</a><br></li>
+
+                                                
+                                                <li><a class = "red" href="/blog/django-concurrency">Afegir concurrència a comandes de Django</a><br></li>
+                                                
+                                            </ul>
+                                        </section>                                        <section>
+                                            <header>
+                                                <h2>Social</h2>
+                                            </header>
+                                            <p>
+                                                My social places
+                                            </p>
+                                            <ul class="link-list">
+                                                <li><a class="red" href="https://github.com/avallbona">Github</a></li>
+                                                <li><a class="red" href="https://www.linkedin.com/in/andreu-vallbona-plazas-b0b58720">LinkedIn</a></li>
+                                                <li><a class="red" href="https://twitter.com/avallbona">Twitter</a></li>
+                                            </ul>
+                                        </section>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			<!-- Footer -->
+                <!-- Copyright -->
+                <div id="copyright">
+                     &copy; 2019 | Design: <a href="http://html5up.net">HTML5 UP</a> | Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a><br />
+                    Based on the <a href="https://html5up.net/halcyonic">Halcyonic theme</a> by HTML5 UP, who graciously releases all of their themes under a <a href="https://creativecommons.org/licenses/by/3.0/">Creative Commons license</a>.<br>In short, that means you can do whatever you want with this theme, as long as HTML5 UP is credited.
+                </div>
+
+
+		</div>
+
+		<!-- Scripts -->
+            <script src="/theme/js/jquery.min.js"></script>
+            <script src="/theme/js/skel.min.js"></script>
+            <script src="/theme/js/skel-viewport.min.js"></script>
+            <script src="/theme/js/util.js"></script>
+            <!--[if lte IE 8]><script src="/theme/js/ie/respond.min.js"></script><![endif]-->
+            <script src="/theme/js/main.js"></script>
+
+            <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
+            <script type="text/javascript">
+                $(document).ready(function() {
+                  $('div.highlight').each(function(i, block) {
+                    hljs.highlightBlock(block);
+                  });
+                });
+            </script>
+
+
+	</body>
+</html>
+
