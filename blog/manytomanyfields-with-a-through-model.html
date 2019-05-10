@@ -70,16 +70,13 @@
             </header>
             <p>Many times I found myself, many collegues and some <a href="https://stackoverflow.com/questions/17256724/include-intermediary-through-model-in-responses-in-django-rest-framework">other people</a> struggling 
 when working with <strong>ManyToManyFields</strong> and trying to serialize 
-the relation with a <strong>Through</strong> Model.<!--more--></p>
+the relation with a <strong>through</strong> Model.<!--more--></p>
 <p>I think the official documentation of the amazing <a href="https://www.django-rest-framework.org/api-guide/relations/#manytomanyfields-with-a-through-model">django-rest-framework</a> does not provide 
-a clear example on how to do it (may be it's a to specific use case). So I decided to leave here, as a reminder 
+a clear example on how to do it (may be it's a too specific use case). So I decided to leave here, as a reminder 
 to myself and to anybody else, a small clarifitacion on how it works.</p>
 <p>Example, given the following models:</p>
 <div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Artist</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
     <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">180</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
 
 
 <span class="k">class</span> <span class="nc">Portfolio</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
@@ -87,18 +84,12 @@ to myself and to anybody else, a small clarifitacion on how it works.</p>
     <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">180</span><span class="p">)</span>
     <span class="n">artists</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ManyToManyField</span><span class="p">(</span><span class="n">Artist</span><span class="p">,</span> <span class="n">through</span><span class="o">=</span><span class="s1">&#39;Calification&#39;</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;{} - {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-
 
 <span class="k">class</span> <span class="nc">Calification</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
     <span class="n">portfolio</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Portfolio</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">CASCADE</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;califications&#39;</span><span class="p">)</span>
     <span class="n">artist</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Artist</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">CASCADE</span><span class="p">)</span>
     <span class="n">rate</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
     <span class="n">added_at</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">auto_now_add</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;{} - {} - {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">portfolio</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">artist</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rate</span><span class="p">)</span>
 </pre></div>
 
 
