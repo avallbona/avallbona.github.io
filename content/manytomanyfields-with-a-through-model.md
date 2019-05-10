@@ -8,10 +8,10 @@ Authors: Andreu
 
 Many times I found myself, many collegues and some [other people][stackoverflow] struggling 
 when working with **ManyToManyFields** and trying to serialize 
-the relation with a **Through** Model.<!--more-->
+the relation with a **through** Model.<!--more-->
 
 I think the official documentation of the amazing [django-rest-framework][django-rest-framework] does not provide 
-a clear example on how to do it (may be it's a to specific use case). So I decided to leave here, as a reminder 
+a clear example on how to do it (may be it's a too specific use case). So I decided to leave here, as a reminder 
 to myself and to anybody else, a small clarifitacion on how it works.
 
 Example, given the following models:
@@ -20,17 +20,11 @@ Example, given the following models:
 class Artist(models.Model):
     name = models.CharField(max_length=180)
 
-    def __str__(self):
-        return self.name
-
 
 class Portfolio(models.Model):
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     name = models.CharField(max_length=180)
     artists = models.ManyToManyField(Artist, through='Calification')
-
-    def __str__(self):
-        return '{} - {}'.format(self.user, self.name)
 
 
 class Calification(models.Model):
@@ -39,14 +33,11 @@ class Calification(models.Model):
     rate = models.IntegerField(default=0)
     added_at = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        return '{} - {} - {}'.format(self.portfolio, self.artist, self.rate)
 ```
     
 We could serialize them as follows:
 
 ```python
-
 class ArtistSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -76,7 +67,6 @@ class PortfolioSerializer(serializers.ModelSerializer):
 And we would obtain a result like the following:
 
 ```json
-
 [
     {
         "id": 1,
