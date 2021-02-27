@@ -72,9 +72,8 @@
 del format de les dates. Per a la part de frontend no és massa
 problemàtic ja que podem fixar noltros el format de cada data en
 particular. Per exemple:  </p>
-<div class="highlight"><pre><span></span><span class="cp">{%</span> <span class="k">trans</span> <span class="s1">&#39;Fecha salida&#39;</span> <span class="cp">%}</span><span class="x">: </span><span class="cp">{{</span> <span class="nv">reservation.departure_date_res</span><span class="o">|</span><span class="nf">date</span><span class="s1">:&#39;d/m/Y&#39;</span> <span class="cp">}}</span><span class="x"></span>
-</pre></div>
-
+<div class="highlight"><pre><span></span><code><span class="cp">{%</span> <span class="k">trans</span> <span class="s1">&#39;Fecha salida&#39;</span> <span class="cp">%}</span><span class="x">: </span><span class="cp">{{</span> <span class="nv">reservation.departure_date_res</span><span class="o">|</span><span class="nf">date</span><span class="s1">:&#39;d/m/Y&#39;</span> <span class="cp">}}</span><span class="x"></span>
+</code></pre></div>
 
 <p>El problema sorgeix amb, per exemple, el format de les dates de
 l'administrador, el qual està determinat pels valors per defecte de
@@ -87,28 +86,26 @@ directori on està definit el projecte s'ha de creat una carpeta
 formats de les dates. </p>
 <p>Llavors al settings.py s'ha d'afegir una linia per indicar d'on s'ha
 d'agafar el format de les dates:</p>
-<div class="highlight"><pre><span></span>FORMAT_MODULE_PATH = &#39;balearictransfer.formats&#39;
-</pre></div>
-
+<div class="highlight"><pre><span></span><code><span class="err">FORMAT_MODULE_PATH = &#39;balearictransfer.formats&#39;</span>
+</code></pre></div>
 
 <p>També es poden indicar el format de les dates pels "inputs" de les
 dates, així com el separador decimal o de mils, per exemple:</p>
-<div class="highlight"><pre><span></span>DATE_INPUT_FORMATS = (  
-    &#39;%d-%m-%Y&#39;, # &#39;21-03-2014&#39;  
-)  
-TIME_INPUT_FORMATS = (  
-    &#39;%H:%M:%S&#39;, # &#39;17:59:59&#39;  
-    &#39;%H:%M&#39;, # &#39;17:59&#39;  
-)  
-DATETIME_INPUT_FORMATS = (  
-    &#39;%d-%m-%Y %H:%M&#39;, # &#39;21-03-2014 17:59&#39;  
-)
+<div class="highlight"><pre><span></span><code><span class="n">DATE_INPUT_FORMATS</span> <span class="o">=</span> <span class="p">(</span>  
+    <span class="s1">&#39;%d-%m-%Y&#39;</span><span class="p">,</span> <span class="o">#</span> <span class="s1">&#39;21-03-2014&#39;</span>  
+<span class="p">)</span>  
+<span class="n">TIME_INPUT_FORMATS</span> <span class="o">=</span> <span class="p">(</span>  
+    <span class="s1">&#39;%H:%M:%S&#39;</span><span class="p">,</span> <span class="o">#</span> <span class="s1">&#39;17:59:59&#39;</span>  
+    <span class="s1">&#39;%H:%M&#39;</span><span class="p">,</span> <span class="o">#</span> <span class="s1">&#39;17:59&#39;</span>  
+<span class="p">)</span>  
+<span class="n">DATETIME_INPUT_FORMATS</span> <span class="o">=</span> <span class="p">(</span>  
+    <span class="s1">&#39;%d-%m-%Y %H:%M&#39;</span><span class="p">,</span> <span class="o">#</span> <span class="s1">&#39;21-03-2014 17:59&#39;</span>  
+<span class="p">)</span>
 
-DECIMAL_SEPARATOR = u&#39;.&#39;  
-THOUSAND_SEPARATOR = u&#39;,&#39;  
-NUMBER_GROUPING = 3
-</pre></div>
-
+<span class="n">DECIMAL_SEPARATOR</span> <span class="o">=</span> <span class="n">u</span><span class="s1">&#39;.&#39;</span>  
+<span class="n">THOUSAND_SEPARATOR</span> <span class="o">=</span> <span class="n">u</span><span class="s1">&#39;,&#39;</span>  
+<span class="n">NUMBER_GROUPING</span> <span class="o">=</span> <span class="mi">3</span>
+</code></pre></div>
 
 <p>A <strong>Github</strong> podeu trobar un <a href="https://github.com/andilabs/demo_time_set">projecte de mostra</a> que explica com
 funciona el tema. I també la <a href="http://stackoverflow.com/a/22565251">pertinent explicació</a> a <strong>Stack Overflow</strong></p>
@@ -167,7 +164,7 @@ funciona el tema. I també la <a href="http://stackoverflow.com/a/22565251">pert
 			<!-- Footer -->
                 <!-- Copyright -->
                 <div id="copyright">
-                     &copy; 2019 | Design: <a href="http://html5up.net">HTML5 UP</a> | Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a><br />
+                     &copy; 2021 | Design: <a href="http://html5up.net">HTML5 UP</a> | Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a><br />
                     Based on the <a href="https://html5up.net/halcyonic">Halcyonic theme</a> by HTML5 UP, who graciously releases all of their themes under a <a href="https://creativecommons.org/licenses/by/3.0/">Creative Commons license</a>.<br>In short, that means you can do whatever you want with this theme, as long as HTML5 UP is credited.
                 </div>
 

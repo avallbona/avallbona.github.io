@@ -76,7 +76,7 @@ fixi a l'inici del path de la url el codi d'idioma. Amb el middleware
 que explicarem no cal fer servir l'<strong>i18n_patterns</strong> ja que serà el
 pròpi "middleware" que detectarà i fixarà l'idioma de l'aplicació.</p>
 <p>Primer de tot crearem l'arxiu que contindrà el "middleware":</p>
-<div class="highlight"><pre><span></span><span class="c1"># -*- encoding: utf-8 -*-</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># -*- encoding: utf-8 -*-</span>
 
 <span class="kn">from</span> <span class="nn">django.utils</span> <span class="kn">import</span> <span class="n">translation</span>  
 <span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
@@ -99,37 +99,34 @@ pròpi "middleware" que detectarà i fixarà l'idioma de l'aplicació.</p>
         <span class="k">if</span> <span class="n">lang</span> <span class="ow">and</span> <span class="n">lang</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">language_codes</span><span class="p">:</span>  
             <span class="n">translation</span><span class="o">.</span><span class="n">activate</span><span class="p">(</span><span class="n">lang</span><span class="p">)</span>  
             <span class="n">request</span><span class="o">.</span><span class="n">LANGUAGE_CODE</span> <span class="o">=</span> <span class="n">lang</span>
-</pre></div>
-
+</code></pre></div>
 
 <p>Fixem-nos en el cas que no s'ens indica cap codi d'idioma i ens ve
 "www", que fixem el primer idioma per defecte definit als "settings.py".</p>
 <p>Llavors, als "settings.py" hem de tenir configurats els idiomes amb els
 quals volem fer feina:</p>
-<div class="highlight"><pre><span></span>LANGUAGES = (  
-    (&#39;ca&#39;, &#39;Català&#39;),  
-    (&#39;es&#39;, &#39;Español&#39;),  
-    (&#39;de&#39;, &#39;Deutsch&#39;),  
-    (&#39;en&#39;, &#39;English&#39;),  
-)
-</pre></div>
-
+<div class="highlight"><pre><span></span><code><span class="err">LANGUAGES = (  </span>
+<span class="err">    (&#39;ca&#39;, &#39;Català&#39;),  </span>
+<span class="err">    (&#39;es&#39;, &#39;Español&#39;),  </span>
+<span class="err">    (&#39;de&#39;, &#39;Deutsch&#39;),  </span>
+<span class="err">    (&#39;en&#39;, &#39;English&#39;),  </span>
+<span class="err">)</span>
+</code></pre></div>
 
 <p>i, com a darrer pas, li hem d'indicar als "settings.py" que ens agafi el
 "middleware" que acabem de crear:</p>
-<div class="highlight"><pre><span></span>MIDDLEWARE_CLASSES = (  
-    ...,  
-    &#39;myproject.language_middleware.SubdomainLanguageMiddleware&#39;,  
-)
-</pre></div>
-
+<div class="highlight"><pre><span></span><code><span class="err">MIDDLEWARE_CLASSES = (  </span>
+<span class="err">    ...,  </span>
+<span class="err">    &#39;myproject.language_middleware.SubdomainLanguageMiddleware&#39;,  </span>
+<span class="err">)</span>
+</code></pre></div>
 
 <p>Llavors ja podrem accedir a la web fixant l'idioma en el subdomini:</p>
-<div class="highlight"><pre><span></span>http://www.lamevaweb.com  
-http://es.lamevaweb.com  
-http://de.lamevaweb.com  
-http://en.lamevaweb.com
-</pre></div>
+<div class="highlight"><pre><span></span><code><span class="c">http://www.lamevaweb.com  </span>
+<span class="c">http://es.lamevaweb.com  </span>
+<span class="c">http://de.lamevaweb.com  </span>
+<span class="c">http://en.lamevaweb.com</span>
+</code></pre></div>
             <hr>
               <!-- Pagination -->
             <div class="pagination">
@@ -185,7 +182,7 @@ http://en.lamevaweb.com
 			<!-- Footer -->
                 <!-- Copyright -->
                 <div id="copyright">
-                     &copy; 2019 | Design: <a href="http://html5up.net">HTML5 UP</a> | Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a><br />
+                     &copy; 2021 | Design: <a href="http://html5up.net">HTML5 UP</a> | Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a><br />
                     Based on the <a href="https://html5up.net/halcyonic">Halcyonic theme</a> by HTML5 UP, who graciously releases all of their themes under a <a href="https://creativecommons.org/licenses/by/3.0/">Creative Commons license</a>.<br>In short, that means you can do whatever you want with this theme, as long as HTML5 UP is credited.
                 </div>
 

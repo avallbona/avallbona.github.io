@@ -69,42 +69,39 @@
 
             </header>
             <p>Per defecte Django empra el backend d'autenticació "ModelBackend"</p>
-<div class="highlight"><pre><span></span>AUTHENTICATION\_BACKENDS = (  
-    &#39;django.contrib.auth.backends.ModelBackend&#39;,  
-)
-</pre></div>
-
+<div class="highlight"><pre><span></span><code><span class="err">AUTHENTICATION\_BACKENDS = (  </span>
+<span class="err">    &#39;django.contrib.auth.backends.ModelBackend&#39;,  </span>
+<span class="err">)</span>
+</code></pre></div>
 
 <p>Aquest "backend" intenta autenticara partir del nom d'usuari i la
 contrasenya que reb. Nogensmenys es pot donar el cas que vulguem
 autenticar a partir de l'email de l'usuari.<!--more--></p>
 <p>Per aquest cas ho podem fer estenent la classe "ModelBackend" i
 reimplementant el mètode autenticate:</p>
-<div class="highlight"><pre><span></span><span class="kr">class</span> <span class="nx">MyCustomEmailAuthBackend</span><span class="p">(</span><span class="nx">ModelBackend</span><span class="p">)</span><span class="o">:</span>  
-    <span class="s2">&quot;&quot;&quot;  </span>
-<span class="s2">    Allow users to log in with their email address  </span>
-<span class="s2">    &quot;&quot;&quot;</span>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="n">MyCustomEmailAuthBackend</span>(<span class="n">ModelBackend</span>):  
+    <span class="s">&quot;&quot;&quot;  </span>
+<span class="s">    Allow users to log in with their email address  </span>
+<span class="s">    &quot;&quot;&quot;</span>
 
-    <span class="nx">def</span> <span class="nx">authenticate</span><span class="p">(</span><span class="nx">self</span><span class="p">,</span> <span class="nx">email</span><span class="o">=</span><span class="nx">None</span><span class="p">,</span> <span class="nx">password</span><span class="o">=</span><span class="nx">None</span><span class="p">,</span> <span class="err">\</span><span class="o">*</span><span class="err">\</span><span class="o">*</span><span class="nx">kwargs</span><span class="p">)</span><span class="o">:</span>
-        <span class="k">if</span> <span class="nx">email</span> <span class="nx">is</span> <span class="nx">None</span> <span class="nx">or</span> <span class="nx">password</span> <span class="nx">is</span> <span class="nx">None</span>:  
-            <span class="kt">return</span> <span class="nx">None</span>
-        <span class="k">try</span><span class="o">:</span>  
-            <span class="nx">user</span> <span class="o">=</span> <span class="nx">User</span><span class="p">.</span><span class="nx">objects</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">email</span><span class="o">=</span><span class="nx">email</span><span class="p">)</span>  
-            <span class="k">if</span> <span class="nx">user</span><span class="p">.</span><span class="nx">check_password</span><span class="p">(</span><span class="nx">password</span><span class="p">)</span><span class="o">:</span>  
-                <span class="k">return</span> <span class="nx">user</span>  
-        <span class="nx">except</span> <span class="nx">User.DoesNotExist</span>:  
-            <span class="kt">return</span>
-</pre></div>
-
+    <span class="n">def</span> <span class="n">authenticate</span>(<span class="nb">self</span>, <span class="n">email</span>=<span class="n">None</span>, <span class="n">password</span>=<span class="n">None</span>, \*\*<span class="n">kwargs</span>):
+        <span class="k">if</span> <span class="n">email</span> <span class="k">is</span> <span class="n">None</span> <span class="o">or</span> <span class="n">password</span> <span class="k">is</span> <span class="n">None:</span>  
+            <span class="k">return</span> <span class="n">None</span>
+        <span class="n">try:</span>  
+            <span class="n">user</span> = <span class="n">User</span>.<span class="n">objects</span>.<span class="nb">get</span>(<span class="n">email</span>=<span class="n">email</span>)  
+            <span class="k">if</span> <span class="n">user</span>.<span class="n">check_password</span>(<span class="n">password</span>):  
+                <span class="k">return</span> <span class="n">user</span>  
+        <span class="n">except</span> <span class="n">User</span>.<span class="n">DoesNotExist:</span>  
+            <span class="k">return</span>
+</code></pre></div>
 
 <p>Un cop que tenim el backend implementat l'hem d'afegir als "settings"
 per tal que Django ho tingui en compte:</p>
-<div class="highlight"><pre><span></span>AUTHENTICATION\_BACKENDS = (  
-    &#39;authentication.MyCustomEmailAuthBackend&#39;,  
-    &#39;django.contrib.auth.backends.ModelBackend&#39;,  
-)
-</pre></div>
-
+<div class="highlight"><pre><span></span><code><span class="err">AUTHENTICATION\_BACKENDS = (  </span>
+<span class="err">    &#39;authentication.MyCustomEmailAuthBackend&#39;,  </span>
+<span class="err">    &#39;django.contrib.auth.backends.ModelBackend&#39;,  </span>
+<span class="err">)</span>
+</code></pre></div>
 
 <p>Aleshores si el nostre formulari posteja l'email i la contrasenya ja ens
 podrem autenticar.</p>
@@ -163,7 +160,7 @@ podrem autenticar.</p>
 			<!-- Footer -->
                 <!-- Copyright -->
                 <div id="copyright">
-                     &copy; 2019 | Design: <a href="http://html5up.net">HTML5 UP</a> | Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a><br />
+                     &copy; 2021 | Design: <a href="http://html5up.net">HTML5 UP</a> | Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a><br />
                     Based on the <a href="https://html5up.net/halcyonic">Halcyonic theme</a> by HTML5 UP, who graciously releases all of their themes under a <a href="https://creativecommons.org/licenses/by/3.0/">Creative Commons license</a>.<br>In short, that means you can do whatever you want with this theme, as long as HTML5 UP is credited.
                 </div>
 

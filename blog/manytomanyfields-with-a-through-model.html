@@ -75,7 +75,7 @@ the relation with a <strong>through</strong> Model.<!--more--></p>
 a clear example on how to do it (may be it's a too specific use case). So I decided to leave here, as a reminder 
 to myself and to anybody else, a small clarifitacion on how it works.</p>
 <p>Example, given the following models:</p>
-<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Artist</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Artist</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
     <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">180</span><span class="p">)</span>
 
 
@@ -89,12 +89,11 @@ to myself and to anybody else, a small clarifitacion on how it works.</p>
     <span class="n">portfolio</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Portfolio</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">CASCADE</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;califications&#39;</span><span class="p">)</span>
     <span class="n">artist</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Artist</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">CASCADE</span><span class="p">)</span>
     <span class="n">rate</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-    <span class="n">added_at</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">auto_now_add</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-</pre></div>
-
+    <span class="n">added_at</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">auto_now_add</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</code></pre></div>
 
 <p>We could serialize them as follows:</p>
-<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">ArtistSerializer</span><span class="p">(</span><span class="n">serializers</span><span class="o">.</span><span class="n">ModelSerializer</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">ArtistSerializer</span><span class="p">(</span><span class="n">serializers</span><span class="o">.</span><span class="n">ModelSerializer</span><span class="p">):</span>
 
     <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
         <span class="n">model</span> <span class="o">=</span> <span class="n">Artist</span>
@@ -112,16 +111,15 @@ to myself and to anybody else, a small clarifitacion on how it works.</p>
 
 <span class="k">class</span> <span class="nc">PortfolioSerializer</span><span class="p">(</span><span class="n">serializers</span><span class="o">.</span><span class="n">ModelSerializer</span><span class="p">):</span>
 
-    <span class="n">artists</span> <span class="o">=</span> <span class="n">CalificationSerializer</span><span class="p">(</span><span class="n">many</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">&#39;califications&#39;</span><span class="p">)</span>
+    <span class="n">artists</span> <span class="o">=</span> <span class="n">CalificationSerializer</span><span class="p">(</span><span class="n">many</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">&#39;califications&#39;</span><span class="p">)</span>
 
     <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
         <span class="n">model</span> <span class="o">=</span> <span class="n">Portfolio</span>
         <span class="n">fields</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;user&#39;</span><span class="p">,</span> <span class="s1">&#39;artists&#39;</span><span class="p">,</span> <span class="p">)</span>
-</pre></div>
-
+</code></pre></div>
 
 <p>And we would obtain a result like the following:</p>
-<div class="highlight"><pre><span></span><span class="p">[</span>
+<div class="highlight"><pre><span></span><code><span class="p">[</span>
     <span class="p">{</span>
         <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
         <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Portfolio 1&quot;</span><span class="p">,</span>
@@ -151,14 +149,12 @@ to myself and to anybody else, a small clarifitacion on how it works.</p>
         <span class="p">]</span>
     <span class="p">}</span>
 <span class="p">]</span>            
-</pre></div>
-
+</code></pre></div>
 
 <p>It's important to remember that it's easier if we set a <code>related_name</code> to the foreign_key we want to follow from the main model.
 If we don't set it we would have to set the attribute <code>source</code> of the nested serializer <code>CalificationSerializer</code> as</p>
-<div class="highlight"><pre><span></span><span class="n">artists</span> <span class="o">=</span> <span class="n">CalificationSerializer</span><span class="p">(</span><span class="n">many</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">&#39;calification_set.all&#39;</span><span class="p">)</span>
-</pre></div>
-
+<div class="highlight"><pre><span></span><code><span class="n">artists</span> <span class="o">=</span> <span class="n">CalificationSerializer</span><span class="p">(</span><span class="n">many</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">&#39;calification_set.all&#39;</span><span class="p">)</span>
+</code></pre></div>
 
 <p>By default, relational fields that target a <strong>ManyToManyField</strong> with a
 <strong>through</strong> model specified are set to read-only.</p>
@@ -219,7 +215,7 @@ to <strong>True</strong>.</p>
 			<!-- Footer -->
                 <!-- Copyright -->
                 <div id="copyright">
-                     &copy; 2019 | Design: <a href="http://html5up.net">HTML5 UP</a> | Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a><br />
+                     &copy; 2021 | Design: <a href="http://html5up.net">HTML5 UP</a> | Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a><br />
                     Based on the <a href="https://html5up.net/halcyonic">Halcyonic theme</a> by HTML5 UP, who graciously releases all of their themes under a <a href="https://creativecommons.org/licenses/by/3.0/">Creative Commons license</a>.<br>In short, that means you can do whatever you want with this theme, as long as HTML5 UP is credited.
                 </div>
 

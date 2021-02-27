@@ -78,22 +78,19 @@ per tal d'editar les relacions 1-n amb Django. Tambe tenir
 ens "dinamitza" a través de Javascript la inserció i eliminació de
 tuples dels<strong> "formsets"</strong>.<!--more--></p>
 <p>Per instal.lar les "django extra views" cal executar:</p>
-<div class="highlight"><pre><span></span>pip install django-extra-views
-</pre></div>
-
+<div class="highlight"><pre><span></span><code><span class="err">pip install django-extra-views</span>
+</code></pre></div>
 
 <p>Per instal.lar django-formset-js cal executar:  </p>
-<div class="highlight"><pre><span></span>pip install django-formset-js
-</pre></div>
-
+<div class="highlight"><pre><span></span><code><span class="err">pip install django-formset-js</span>
+</code></pre></div>
 
 <p>i afegir l'aplicació al projecte:  </p>
-<div class="highlight"><pre><span></span>INSTALLED\_APPS = (  
-    ...  
-    &#39;djangoformsetjs&#39;,  
-)
-</pre></div>
-
+<div class="highlight"><pre><span></span><code><span class="err">INSTALLED\_APPS = (  </span>
+<span class="err">    ...  </span>
+<span class="err">    &#39;djangoformsetjs&#39;,  </span>
+<span class="err">)</span>
+</code></pre></div>
 
 <p>Detallant els passos, que serien:</p>
 <p><strong>Views</strong>:</p>
@@ -109,7 +106,7 @@ EquipmentPrice, ChargePrice<br>
 from cms.cmscars.office.forms import AssuranceFeaturePriceForm,
 EquipmentPriceForm, ChargePriceForm</p>
 <h4>views.py</h4>
-<div class="highlight"><pre><span></span>    <span class="k">class</span> <span class="nc">AssuranceFeaturePricesInline</span><span class="p">(</span><span class="n">InlineFormSet</span><span class="p">):</span>  
+<div class="highlight"><pre><span></span><code>    <span class="k">class</span> <span class="nc">AssuranceFeaturePricesInline</span><span class="p">(</span><span class="n">InlineFormSet</span><span class="p">):</span>  
         <span class="n">model</span> <span class="o">=</span> <span class="n">AssuranceFeaturePrice</span>  
         <span class="n">form_class</span> <span class="o">=</span> <span class="n">AssuranceFeaturePriceForm</span>  
         <span class="n">extra</span> <span class="o">=</span> <span class="mi">0</span>
@@ -129,8 +126,7 @@ EquipmentPriceForm, ChargePriceForm</p>
 
     <span class="k">class</span> <span class="nc">OfficeUpdateView</span><span class="p">(</span><span class="n">UpdateWithInlinesView</span><span class="p">):</span>  
         <span class="n">inlines</span> <span class="o">=</span> <span class="p">[</span><span class="n">AssuranceFeaturePricesInline</span><span class="p">,</span> <span class="n">EquipmentPricesInline</span><span class="p">,</span> <span class="n">ChargePricesInline</span><span class="p">]</span>  
-</pre></div>
-
+</code></pre></div>
 
 <h4>forms.py</h4>
 <p>[sourcecode language="python" wraplines="false" collapse="false"]<br>
@@ -232,7 +228,7 @@ registro' %}<br>
 <p>&lt;!-- fin formsets --&gt;<br>
 &lt;/form&gt;</p>
 <p>{% endblock content2 %}</p>
-<div class="highlight"><pre><span></span><span class="cp">{%</span> <span class="k">block</span> <span class="nv">extrajs</span> <span class="cp">%}</span>  
+<div class="highlight"><pre><span></span><code><span class="cp">{%</span> <span class="k">block</span> <span class="nv">extrajs</span> <span class="cp">%}</span>  
 <span class="nt">&lt;script</span> <span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">src=</span><span class="s">&quot;</span><span class="cp">{%</span> <span class="k">static</span> <span class="s1">&#39;js/jquery.formset.min.js&#39;</span> <span class="cp">%}</span><span class="s">&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>  
 <span class="nt">&lt;script</span> <span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;</span>  
 //<span class="cp">&lt;![CDATA[ </span>
@@ -240,22 +236,19 @@ registro' %}<br>
 <span class="cp">    animateForms: true, reorderMode: &#39;none&#39;, }); }); //\]\]&gt;</span>;  
 <span class="nt">&lt;/script&gt;</span>;  
 <span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span>  
-</pre></div>
-
+</code></pre></div>
 
 <p>A aquest exemple també es fa ús de <a href="http://django-crispy-forms.readthedocs.org/en/latest/">Crispy Forms</a>, per tal
 de millorar l'aparença dels formularis. Per instal.lar-ho:</p>
-<div class="highlight"><pre><span></span>pip install --upgrade django-crispy-forms
-</pre></div>
-
+<div class="highlight"><pre><span></span><code><span class="err">pip install --upgrade django-crispy-forms</span>
+</code></pre></div>
 
 <p>i afegir l'aplicació al projecte:  </p>
-<div class="highlight"><pre><span></span><span class="n">INSTALLED_APPS</span> <span class="o">=</span> <span class="p">(</span>  
+<div class="highlight"><pre><span></span><code><span class="n">INSTALLED_APPS</span> <span class="o">=</span> <span class="p">(</span>  
     <span class="o">...</span>  
     <span class="s1">&#39;crispy_forms&#39;</span><span class="p">,</span>  
 <span class="p">)</span>  
-</pre></div>
-
+</code></pre></div>
 
 <p>En aquest cas hi ha varis "formsets" relacionats amb el model principal.
 Per qüestió d'usabilitat s'ha implementat el formset dins un "Tab" del
@@ -318,7 +311,7 @@ enllaços als mateixos.</p>
 			<!-- Footer -->
                 <!-- Copyright -->
                 <div id="copyright">
-                     &copy; 2019 | Design: <a href="http://html5up.net">HTML5 UP</a> | Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a><br />
+                     &copy; 2021 | Design: <a href="http://html5up.net">HTML5 UP</a> | Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a><br />
                     Based on the <a href="https://html5up.net/halcyonic">Halcyonic theme</a> by HTML5 UP, who graciously releases all of their themes under a <a href="https://creativecommons.org/licenses/by/3.0/">Creative Commons license</a>.<br>In short, that means you can do whatever you want with this theme, as long as HTML5 UP is credited.
                 </div>
 

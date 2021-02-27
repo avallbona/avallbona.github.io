@@ -83,7 +83,7 @@ la part esquerra i la part dreta de la clàusula sql. Es fa estenent la classe <
 del paquet "<code>django.db.models.fields.Lookup</code>" i, posteriorment, registrant aquest classe 
 personalitzada amb el mètode <code>register_lookup</code> de la classe <code>django.db.models.fields.Field</code>. 
 E.g.:</p>
-<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.db.models</span> <span class="kn">import</span> <span class="n">Lookup</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">django.db.models</span> <span class="kn">import</span> <span class="n">Lookup</span>
 <span class="kn">from</span> <span class="nn">django.db.models.fields</span> <span class="kn">import</span> <span class="n">Field</span>
 
 
@@ -97,51 +97,43 @@ E.g.:</p>
         <span class="n">lhs</span><span class="p">,</span> <span class="n">lhs_params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">process_lhs</span><span class="p">(</span><span class="n">qn</span><span class="p">,</span> <span class="n">connection</span><span class="p">)</span>
         <span class="n">rhs</span><span class="p">,</span> <span class="n">rhs_params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">process_rhs</span><span class="p">(</span><span class="n">qn</span><span class="p">,</span> <span class="n">connection</span><span class="p">)</span>
         <span class="n">params</span> <span class="o">=</span> <span class="n">lhs_params</span> <span class="o">+</span> <span class="n">rhs_params</span>
-        <span class="k">return</span> <span class="s1">&#39;lower({}) = {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">),</span> <span class="n">params</span>
+        <span class="k">return</span> <span class="s1">&#39;lower(</span><span class="si">{}</span><span class="s1">) = </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">),</span> <span class="n">params</span>
 
 <span class="n">Field</span><span class="o">.</span><span class="n">register_lookup</span><span class="p">(</span><span class="n">Lower</span><span class="p">)</span>
-</pre></div>
-
+</code></pre></div>
 
 <p>L'exemple en concret implementa la funcionalitat de comparar el contingut d'un camp en 
 minúscula amb la cadena que nosaltres li passem. Hi ha varis punts importants:</p>
-<div class="highlight"><pre><span></span>lookup_name = &#39;lower&#39;
-</pre></div>
-
+<div class="highlight"><pre><span></span><code><span class="err">lookup_name = &#39;lower&#39;</span>
+</code></pre></div>
 
 <p>Defineix el nom que emprarem per executar la clàusula.</p>
-<div class="highlight"><pre><span></span>lhs, lhs_params = self.process_lhs(qn, connection)
-</pre></div>
-
+<div class="highlight"><pre><span></span><code><span class="err">lhs, lhs_params = self.process_lhs(qn, connection)</span>
+</code></pre></div>
 
 <p>Compila la part esquerra de la clàusula</p>
-<div class="highlight"><pre><span></span>rhs, rhs_params = self.process_rhs(qn, connection)
-</pre></div>
-
+<div class="highlight"><pre><span></span><code><span class="err">rhs, rhs_params = self.process_rhs(qn, connection)</span>
+</code></pre></div>
 
 <p>Compila la part dreta de la clàusula</p>
-<div class="highlight"><pre><span></span>Field.register_lookup(Lower)
-</pre></div>
-
+<div class="highlight"><pre><span></span><code><span class="err">Field.register_lookup(Lower)</span>
+</code></pre></div>
 
 <p>Registrem el custom lookup per tal de poder-lo emprar.</p>
 <p>Finalment, un exemple d'ús del nostre custom lookup seria:</p>
-<div class="highlight"><pre><span></span><span class="k">try</span><span class="o">:</span>
+<div class="highlight"><pre><span></span><code><span class="k">try</span><span class="o">:</span>
     <span class="n">task</span> <span class="o">=</span> <span class="n">TransTask</span><span class="o">.</span><span class="na">objects</span><span class="o">.</span><span class="na">filter</span><span class="o">(</span><span class="n">object_class__lower</span><span class="o">=</span><span class="n">class_name</span><span class="o">).</span><span class="kd">get</span><span class="o">()</span>
 <span class="n">except</span> <span class="n">TransTask</span><span class="o">.</span><span class="na">DoesNotExist</span><span class="o">:</span>
     <span class="n">task</span> <span class="o">=</span> <span class="n">None</span>
-</pre></div>
-
+</code></pre></div>
 
 <p>&nbsp;</p>
-<div class="highlight"><pre><span></span>object_class__lower=class_name
-</pre></div>
-
+<div class="highlight"><pre><span></span><code><span class="err">object_class__lower=class_name</span>
+</code></pre></div>
 
 <p>és la part on s'aplica el "custom lookup". Compararà el contingut en minúscula del camp </p>
-<div class="highlight"><pre><span></span>object_class
-</pre></div>
-
+<div class="highlight"><pre><span></span><code><span class="err">object_class</span>
+</code></pre></div>
 
 <p>amb el contingut de la variable <code>class_name</code>.</p>
             <hr>
@@ -199,7 +191,7 @@ minúscula amb la cadena que nosaltres li passem. Hi ha varis punts importants:<
 			<!-- Footer -->
                 <!-- Copyright -->
                 <div id="copyright">
-                     &copy; 2019 | Design: <a href="http://html5up.net">HTML5 UP</a> | Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a><br />
+                     &copy; 2021 | Design: <a href="http://html5up.net">HTML5 UP</a> | Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a><br />
                     Based on the <a href="https://html5up.net/halcyonic">Halcyonic theme</a> by HTML5 UP, who graciously releases all of their themes under a <a href="https://creativecommons.org/licenses/by/3.0/">Creative Commons license</a>.<br>In short, that means you can do whatever you want with this theme, as long as HTML5 UP is credited.
                 </div>
 
