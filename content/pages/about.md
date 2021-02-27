@@ -11,7 +11,9 @@ From June 2003 until November 2011 working as an analyst-programmer at AT4.
 From December 2011 until August 2013 worked as head developing team, analyst-programmer 
 and project manager in Mola.com. From November 2013 to March 2014 worked as web developer 
 in First Mallorca. From April 2014 to January 2015 worked as developer in OmniAcces. 
-Since February 2015 I work as software engineer at Apsl.net.
+Since February 2015 to December 2019 worked as software engineer at Apsl.net.
+Since January 2020 to August 2020 worked as a team manager at Avoristravel.com.
+Since September 2020 I work as senior backend engineer at Sherpany.com.
 
 Throughout my career I gained strong knowledge of **HTML5**, **CSS3**, Xhtml 1.x, CSS 2.x, 
 **Python** and **Django**, **Docker**, **Javascript**, ASP, PHP (versions 4 and 5), Zend Framework 1.x, 
